@@ -1,0 +1,47 @@
+{
+  "name": "searsuite-components",
+  "version": "0.1.0",
+  "license": "MIT",
+  "description": "Composable, SSR-compatible React components for SearSuite documentation",
+  "type": "module",
+  "files": ["dist"],
+  "sideEffects": ["./dist/styles.css", "./dist/color.css", "./dist/website.css"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./sidebar-resize": {
+      "types": "./dist/sidebarResize.d.ts",
+      "import": "./dist/sidebarResize.js"
+    },
+    "./back-to-top": {
+      "types": "./dist/backToTopBehavior.d.ts",
+      "import": "./dist/backToTopBehavior.js"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./website.css": "./dist/website.css"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && mkdir -p dist/assets && cp src/styles.css src/color.css src/website.css dist/ && cp src/assets/searsuite-logo.png dist/assets/searsuite-logo.png",
+    "dev": "node demo/server.mjs",
+    "test": "npm run build && node --test test/*.test.mjs"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0"
+  },
+  "dependencies": {
+    "prismjs": "^1.30.0"
+  },
+  "devDependencies": {
+    "@types/prismjs": "^1.26.6",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "jsdom": "^26.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.7.0",
+    "vite": "^6.0.0"
+  }
+}

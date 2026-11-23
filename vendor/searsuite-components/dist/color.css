@@ -1,0 +1,98 @@
+.searsuite{
+  /* The primary midtone is sampled from the bundled SearSuite mark. */
+  --searsuite-primary-50:#eef7ff;
+  --searsuite-primary-100:#d9ecff;
+  --searsuite-primary-200:#b7dcff;
+  --searsuite-primary-300:#8ac7ff;
+  --searsuite-primary-400:#47abff;
+  --searsuite-primary-500:#3182dc;
+  --searsuite-primary-600:#256fcf;
+  --searsuite-primary-700:#1b58c3;
+  --searsuite-primary-800:#174898;
+  --searsuite-primary-900:#123974;
+  --searsuite-primary:var(--searsuite-primary-500);
+
+  --searsuite-neutral-0:#fff;
+  --searsuite-neutral-50:#f6f8fa;
+  --searsuite-neutral-100:#eff1f3;
+  --searsuite-neutral-200:#d8dee4;
+  --searsuite-neutral-300:#d1d9e0;
+  --searsuite-neutral-400:#8c959f;
+  --searsuite-neutral-500:#6e7781;
+  --searsuite-neutral-600:#59636e;
+  --searsuite-neutral-700:#3d444d;
+  --searsuite-neutral-800:#24292f;
+  --searsuite-neutral-900:#1f2328;
+
+  --searsuite-success-50:#dafbe1;
+  --searsuite-success-500:#2da44e;
+  --searsuite-success-700:#1a7f37;
+  --searsuite-warning-50:#fff8c5;
+  --searsuite-warning-500:#d4a72c;
+  --searsuite-warning-700:#9a6700;
+  --searsuite-danger-50:#ffebe9;
+  --searsuite-danger-500:#f85149;
+  --searsuite-danger-700:#cf222e;
+
+  --searsuite-text-primary:var(--searsuite-neutral-900);
+  --searsuite-text-secondary:var(--searsuite-neutral-700);
+  --searsuite-text-muted:var(--searsuite-neutral-600);
+  --searsuite-text-subtle:var(--searsuite-neutral-400);
+  --searsuite-text-hint:var(--searsuite-neutral-500);
+  --searsuite-text-strong:var(--searsuite-neutral-800);
+  --searsuite-text-on-primary:var(--searsuite-neutral-0);
+  --searsuite-text-on-strong:var(--searsuite-neutral-0);
+  --searsuite-surface:var(--searsuite-neutral-0);
+  --searsuite-surface-strong:var(--searsuite-neutral-800);
+  --searsuite-canvas:var(--searsuite-neutral-50);
+  --searsuite-hover:#f3f4f6;
+  --searsuite-action-hover:var(--searsuite-neutral-100);
+  --searsuite-action-active:#e7e9eb;
+  --searsuite-border:var(--searsuite-neutral-300);
+  --searsuite-soft-border:var(--searsuite-neutral-200);
+  --searsuite-link:var(--searsuite-primary-600);
+  --searsuite-link-hover:var(--searsuite-primary-700);
+  --searsuite-focus:var(--searsuite-primary-600);
+  --searsuite-selection:var(--searsuite-primary-50);
+  --searsuite-selection-text:var(--searsuite-primary-700);
+  --searsuite-primary-fill:var(--searsuite-primary-700);
+  --searsuite-success:var(--searsuite-success-500);
+  --searsuite-clear:transparent;
+  --searsuite-action-shadow:rgba(31,35,40,.04);
+  --searsuite-code-bg:rgba(175,184,193,.2);
+  --searsuite-syntax-keyword:#708;
+  --searsuite-syntax-string:#a11;
+  --searsuite-syntax-number:#164;
+  --searsuite-syntax-comment:#940;
+  --searsuite-syntax-definition:#00f;
+  --searsuite-syntax-atom:#219;
+  --searsuite-syntax-type:#085;
+  --searsuite-syntax-regexp:#e40;
+  --searsuite-backdrop:rgba(31,35,40,.55);
+  --searsuite-mobile-backdrop:rgba(31,35,40,.4);
+  --searsuite-dialog-shadow:rgba(0,0,0,.23);
+  --searsuite-mobile-shadow:rgba(0,0,0,.15);
+  --searsuite-preview-shadow:rgba(0,0,0,.12);
+  --searsuite-website-shadow:rgba(31,35,40,.08);
+  --searsuite-back-to-top-shadow:rgba(31,35,40,.22);
+  --searsuite-toast-shadow:rgba(0,0,0,.2);
+
+  /* Short aliases for common semantic roles. */
+  --searsuite-fg:var(--searsuite-text-primary);
+  --searsuite-muted:var(--searsuite-text-muted);
+  --searsuite-tertiary:var(--searsuite-text-subtle);
+  --searsuite-secondary:var(--searsuite-text-secondary);
+  --searsuite-strong:var(--searsuite-text-strong);
+  --searsuite-hint:var(--searsuite-text-hint);
+  --searsuite-blue:var(--searsuite-link);
+  --searsuite-blue-soft:var(--searsuite-selection);
+  --searsuite-blue-strong:var(--searsuite-selection-text);
+  --searsuite-on-accent:var(--searsuite-text-on-primary);
+  --searsuite-on-strong:var(--searsuite-text-on-strong);
+}
+
+.gallery{
+  --gallery-line:var(--searsuite-soft-border);
+  --gallery-ground:var(--searsuite-canvas);
+  --gallery-green:var(--searsuite-success-500);
+}

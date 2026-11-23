@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SearSuite Workbook demo</title>
+    <meta name="robots" content="noindex,follow" />
+    <style>
+      html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+      * { box-sizing: border-box; }
+      #app-root { display: flex; flex-direction: column; width: 100%; height: 100%; }
+      #canvas { display: block; width: 100%; flex: 1; min-height: 0; cursor: cell; }
+    </style>
+  </head>
+  <body>
+    <div id="app-root">
+      <canvas id="canvas"></canvas>
+      <div id="bottom-bar-container"></div>
+    </div>
+    <script type="module" src="./canvas.ts"></script>
+  </body>
+</html>

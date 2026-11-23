@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SearSuite Quickstart — Install and use the npm packages</title>
+    <meta
+      name="description"
+      content="Install SearSuite from npm and run an editable spreadsheet in your browser."
+    />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" type="image/png" href="/assets/searsuite-logo.png" />
+    <link rel="canonical" href="%SITE_URL%%CANONICAL_PATH%" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <meta property="og:title" content="SearSuite Quickstart" />
+    <meta
+      property="og:description"
+      content="Install SearSuite from npm and run an editable spreadsheet in your browser."
+    />
+    <meta property="og:url" content="%SITE_URL%%CANONICAL_PATH%" />
+    <meta property="og:image" content="%SITE_URL%/og-searsuite.png" />
+  </head>
+  <body class="docs-page quickstart-page">
+    <header class="site-header docs-header">
+      <a class="brand" href="/"
+        ><img class="brand-logo" src="/assets/searsuite-logo.png" alt="" width="32" height="32" /><span
+          >SearSuite</span
+        ></a
+      >
+      <nav class="site-nav docs-nav" aria-label="Documentation navigation">
+        <a class="is-current" href="/docs/quickstart/" aria-current="page">Quickstart</a
+        ><a href="/docs/">Documentation</a>
+      </nav>
+    </header>
+    <main class="docs-landing">
+      <header class="docs-landing-intro">
+        <h1>Get started with SearSuite</h1>
+        <p>
+          SearSuite provides TypeScript modules for building spreadsheet experiences that people and AI agents can edit
+          together. Install the public packages from npm and run an editable spreadsheet in your browser.
+        </p>
+      </header>
+      <div class="quickstart-content">
+        <section aria-labelledby="install">
+          <h2 id="install">Install from npm</h2>
+          <p>
+            Use Node.js 22.12 or later. Create a Vite application with the vanilla TypeScript template, then install
+            the Sheet editor and browser packages. No repository checkout is required.
+          </p>
+          <pre data-language="bash"><code>npm create vite@6 my-searsuite-app -- --template vanilla-ts
+cd my-searsuite-app
+npm install
+npm install \
+  @searsuite/sear-assembly-setup@0.0.1 \
+  @searsuite/sear-browser-adapters@0.0.1 \
+  @searsuite/sear-plugin-web-toolbar@0.0.1 \
+  @searsuite/sear-plugin-sheet-doc-adapter@0.0.1 \
+  @searsuite/sear-render-scroll@0.0.1</code></pre>
+          <p>
+            For an existing application, run only the install command in its project directory. When adding other
+            <code>@searsuite/*</code> packages, use the same release version.
+          </p>
+        </section>
+        <section aria-labelledby="create-page">
+          <h2 id="create-page">Create the page</h2>
+          <p>
+            Replace <code>index.html</code> with the following page. The toolbar has its own container, and the
+            Canvas provides an 800 by 480 pixel editing surface.
+          </p>
+          <pre data-language="html"><code>&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+    &lt;title&gt;SearSuite&lt;/title&gt;
+    &lt;style&gt;
+      body { margin: 0; }
+      #canvas { display: block; width: 800px; height: 480px; }
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="toolbar"&gt;&lt;/div&gt;
+    &lt;canvas id="canvas"&gt;&lt;/canvas&gt;
+    &lt;script type="module" src="/src/main.ts"&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        </section>
+        <section aria-labelledby="connect-editor">
+          <h2 id="connect-editor">Create the editor</h2>
+          <p>
+            Replace <code>src/main.ts</code> with this code. It supplies the browser adapters, creates the Sheet
+            editor, and mounts its toolbar.
+          </p>
+          <pre data-language="typescript"><code>import {
+  createEmptySheetDocumentState,
+  createSheetEditor,
+  SheetRuntimeCapability,
+} from '@searsuite/sear-assembly-setup';
+import {
+  BrowserPlatform,
+  WebCanvasRenderContext,
+  WebCursorEngine,
+  WebEventRegistrar,
+  WebKeyboardRouter,
+  WebPointerCapture,
+  WebScroller,
+  WebSocketTransport,
+  WebTextInput,
+} from '@searsuite/sear-browser-adapters';
+import { SearWebToolbar, WebSheetAdapterDefaults } from '@searsuite/sear-plugin-web-toolbar';
+import { createSheetEmbeddedSearCoreEditor } from '@searsuite/sear-plugin-sheet-doc-adapter';
+import { Scroller } from '@searsuite/sear-render-scroll';
+
+const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+const editor = createSheetEditor({
+  viewport: { width: canvas.clientWidth, height: canvas.clientHeight },
+  sheetState: createEmptySheetDocumentState(100, 26),
+  embeddedEditor: createSheetEmbeddedSearCoreEditor(),
+  adapters: {
+    ...WebSheetAdapterDefaults,
+    platform: BrowserPlatform,
+    createRenderContexts() {
+      const context = new WebCanvasRenderContext(canvas, false, new BrowserPlatform());
+      return {
+        renderContext: context,
+        offScreenRenderContext: context.cloneNode(),
+        hitRenderContext: context.createHitNode(),
+      };
+    },
+    scroller: WebScroller,
+    eventRegistrar: WebEventRegistrar,
+    textInput: WebTextInput,
+    keyboardRouter: WebKeyboardRouter,
+    pointerCapture: WebPointerCapture,
+    cursorEngine: WebCursorEngine,
+    collabTransport: WebSocketTransport,
+    toolbar: SearWebToolbar,
+    registerEnvironment(container) {
+      container.registerInstance(Scroller.ContainerSymbol, canvas);
+      container.registerInstance(WebKeyboardRouter.eventTargetSymbol, document);
+      container.registerInstance(WebPointerCapture.eventTargetSymbol, document);
+    },
+  },
+});
+
+editor.services.require(SheetRuntimeCapability.Toolbar).mount(document.getElementById('toolbar'));
+
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => editor.destroy());
+}</code></pre>
+          <p>
+            The editor runs locally. Providing <code>WebSocketTransport</code> does not open a collaboration
+            connection; this setup does not require a collaboration server. In an application, call
+            <code>editor.destroy()</code> when the editor view unmounts.
+          </p>
+        </section>
+        <section aria-labelledby="start">
+          <h2 id="start">Start the application</h2>
+          <pre data-language="bash"><code>npm run dev</code></pre>
+          <p>
+            Open the URL printed by Vite. Select a cell and type to edit it, or double-click a cell to open its
+            editor. See the <a href="/docs/guide/#host">host application guide</a> and
+            <a href="/docs/ref/#sear-assembly-setup">API reference</a> for further integration.
+          </p>
+        </section>
+      </div>
+    </main>
+    <script type="module" src="/src/docs.ts"></script>
+  </body>
+</html>

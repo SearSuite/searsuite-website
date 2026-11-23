@@ -1,0 +1,350 @@
+@import 'searsuite-components/website.css';
+
+html.reference-page {
+  scroll-behavior: auto;
+}
+
+.reference-page .reference-detail-chapter {
+  scroll-margin-top: calc(var(--searsuite-header-height) + 20px);
+}
+
+body.searsuite {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+body.searsuite > .searsuite-main {
+  flex: 1 0 auto;
+}
+
+body.searsuite > .searsuite-footer {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.home-page .intro-section > p {
+  max-width: none;
+}
+
+.home-page .hero {
+  padding-bottom: 0;
+}
+
+.home-page .intro-section {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.home-page .intro-section > p:first-child {
+  margin-top: 0;
+}
+
+.home-page .intro-section > .searsuite-section {
+  margin-bottom: 0;
+}
+
+.home-page .about-section {
+  border-top: 0;
+  padding-top: 16px;
+}
+
+.docs-page .manual-article h2,
+.docs-page .reference-article h2 {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.docs-page .docs-landing-intro,
+.docs-page .reference-symbol-section [data-reference-symbol] {
+  border-bottom: 0;
+}
+
+.docs-page .searsuite-article-body hr {
+  display: none;
+}
+
+.reference-page .reference-detail-chapter .reference-package + .reference-package,
+.reference-page .symbol + .symbol {
+  border-top: 0;
+}
+
+.reference-page .reference-detail-chapter .reference-package {
+  padding: 16px 0 12px;
+}
+
+.reference-page .reference-package > .reference-symbol-section:last-child {
+  margin-bottom: 0;
+}
+
+.reference-page .symbol {
+  padding: 10px 0 12px;
+}
+
+.reference-page .reference-symbol-section {
+  margin: 14px 0;
+}
+
+.reference-page .reference-symbol-section > header h4 {
+  margin: 10px 0 8px;
+}
+
+.reference-page .reference-symbol-kind-group {
+  margin-top: 12px;
+}
+
+.reference-page .reference-symbol-kind-group > h5 {
+  margin: 0 0 8px;
+  color: var(--searsuite-muted);
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.reference-page .symbol dt > a:not(.source-link) {
+  color: var(--searsuite-fg);
+}
+
+.reference-page .symbol-signatures,
+.reference-page .member-signatures {
+  min-width: 0;
+  margin: 0;
+}
+
+.reference-page .symbol-signatures {
+  margin: 8px 0;
+}
+
+.reference-page .member-signatures {
+  width: 100%;
+}
+
+.reference-page .symbol-members {
+  margin: 12px 0 0 18px;
+}
+
+.reference-page .reference-enum-values {
+  margin-top: 12px;
+}
+
+.reference-page .reference-enum-table {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  overflow: visible;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.reference-page .reference-enum-table caption {
+  caption-side: top;
+  margin-bottom: 8px;
+  text-align: left;
+  color: var(--searsuite-muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.reference-page .reference-enum-table th,
+.reference-page .reference-enum-table td {
+  border: 0;
+  border-bottom: 1px solid var(--searsuite-border);
+  padding: 8px 12px;
+}
+
+.reference-page .reference-enum-table thead th {
+  color: var(--searsuite-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.reference-page .reference-enum-table th:first-child {
+  width: 32%;
+}
+
+.reference-page .reference-enum-table tbody th {
+  font-weight: 400;
+}
+
+.reference-page .reference-enum-table code {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.reference-page .reference-enum-documentation p {
+  margin: 4px 0;
+}
+
+.reference-page .reference-object-members {
+  margin-top: 14px;
+}
+
+.reference-page .reference-object-members h6 {
+  margin: 0 0 8px;
+  color: var(--searsuite-muted);
+  font-size: 14px;
+}
+
+.reference-page .reference-object-member + .reference-object-member {
+  margin-top: 10px;
+}
+
+.reference-page .reference-object-member summary {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.reference-page .reference-object-member details[open] .reference-object-member-signatures {
+  margin-top: 6px;
+}
+
+.reference-page .reference-object-member-documentation p {
+  margin: 4px 0;
+}
+
+@media (max-width: 600px) {
+  .reference-page .reference-enum-table caption {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .reference-page .reference-enum-table,
+  .reference-page .reference-enum-table tbody,
+  .reference-page .reference-enum-table tr,
+  .reference-page .reference-enum-table th,
+  .reference-page .reference-enum-table td {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .reference-page .reference-enum-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .reference-page .reference-enum-table tbody tr {
+    border-bottom: 1px solid var(--searsuite-border);
+    padding: 7px 0;
+  }
+
+  .reference-page .reference-enum-table tbody th,
+  .reference-page .reference-enum-table tbody td {
+    border: 0;
+    padding: 2px 0;
+  }
+
+  .reference-page .reference-enum-table tbody th {
+    background: transparent;
+  }
+
+  .reference-page .reference-enum-table th:first-child {
+    width: 100%;
+  }
+}
+
+.reference-page .reference-member-group,
+.reference-page .reference-inherited {
+  margin: 14px 0 0;
+}
+
+.reference-page .reference-member-group > summary,
+.reference-page .reference-inherited > summary {
+  color: var(--searsuite-fg);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.reference-page .reference-member-group > summary span,
+.reference-page .reference-inherited > summary span {
+  color: var(--searsuite-muted);
+  font-weight: 400;
+}
+
+.reference-page .reference-inherited-group {
+  margin: 12px 0 0 18px;
+}
+
+.reference-page .reference-inherited-group > h6 {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.reference-page .reference-inherited-group > ul {
+  margin: 0;
+}
+
+.reference-page .symbol-member + .symbol-member {
+  margin-top: 18px;
+}
+
+.reference-page .symbol-member.searsuite-section {
+  margin-bottom: 0;
+}
+
+.reference-page .reference-concept.searsuite-section {
+  margin-bottom: 12px;
+}
+
+.reference-page .reference-concept > p {
+  margin: 0 0 12px;
+}
+
+.reference-page .reference-concept > p:last-child {
+  margin-bottom: 0;
+}
+
+.reference-page .symbol-member > header {
+  display: block;
+}
+
+.reference-page .reference-signature {
+  display: block;
+  padding: 0;
+  background: transparent;
+  color: var(--searsuite-fg);
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.reference-page .reference-signature-name {
+  color: var(--searsuite-fg);
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.reference-page .reference-type-link {
+  color: var(--searsuite-primary-600);
+  text-decoration: none;
+}
+
+.reference-page .reference-type-link:hover,
+.reference-page .reference-signature-name:hover {
+  text-decoration: underline;
+}
+
+.reference-page .member-documentation {
+  margin-top: 4px;
+}
+
+.reference-page .member-documentation > p {
+  margin: 4px 0;
+}
+
+.reference-page .reference-tag {
+  display: block;
+  margin: 6px 0;
+}
+
+.reference-page .reference-tag strong {
+  margin-right: 8px;
+}

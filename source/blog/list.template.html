@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog | SearSuite</title>
+    <meta name="description" content="Notes and updates from the SearSuite project." />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" type="image/png" href="/assets/searsuite-logo.png" />
+    <link rel="canonical" href="%SITE_URL%%CANONICAL_PATH%" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="SearSuite" />
+    <meta property="og:title" content="SearSuite Blog" />
+    <meta property="og:description" content="Notes and updates from the SearSuite project." />
+    <meta property="og:url" content="%SITE_URL%%CANONICAL_PATH%" />
+    <meta property="og:image" content="%SITE_URL%/og-searsuite.png" />
+  </head>
+  <body class="blog-page">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header docs-header">
+      <a class="brand" href="/" aria-label="SearSuite home">
+        <img class="brand-logo" src="/assets/searsuite-logo.png" alt="" width="32" height="32" />
+        <span>SearSuite</span>
+      </a>
+      <nav class="site-nav docs-nav" aria-label="Main navigation">
+        <a href="/docs/quickstart/">Quickstart</a><a href="/docs/">Documentation</a>
+      </nav>
+    </header>
+    <main id="main" class="blog-layout">
+      <header class="blog-intro">
+        <p class="eyebrow"><span></span>SearSuite</p>
+        <h1>Blog</h1>
+        <p>Notes and updates from the SearSuite project.</p>
+      </header>
+      <div class="blog-list" aria-label="Blog posts">
+        <!-- BLOG_POSTS -->
+      </div>
+    </main>
+    <script type="module" src="/src/docs.ts"></script>
+  </body>
+</html>

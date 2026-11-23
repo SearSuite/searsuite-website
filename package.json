@@ -1,0 +1,48 @@
+{
+  "name": "searsuite-website",
+  "version": "0.0.1",
+  "license": "MIT",
+  "private": true,
+  "packageManager": "pnpm@9.11.0",
+  "description": "The component-based SearSuite website, guide, and source-derived API reference.",
+  "type": "module",
+  "scripts": {
+    "sync": "pnpm run generate:reference && pnpm run generate:quickstart && pnpm run generate:blog && node scripts/sync.mjs",
+    "dev": "pnpm run sync && vite",
+    "build": "pnpm run sync && vite build",
+    "check:types": "tsc --noEmit -p tsconfig.json",
+    "preview": "vite preview",
+    "check:content": "pnpm run sync && node scripts/check-content.mjs",
+    "check:source-docs": "node ../searsuite/scripts/check-source-comments.mjs",
+    "generate:guide": "node scripts/build-guide.mjs",
+    "generate:quickstart": "node scripts/build-quickstart.mjs",
+    "generate:blog": "node scripts/build-blog.mjs",
+    "generate:reference": "pnpm run check:source-docs && typedoc --options typedoc.json --json .generated/typedoc.json && node scripts/build-reference.mjs && pnpm run generate:guide"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "reflect-metadata": "^0.2.2",
+    "searsuite-components": "file:./vendor/searsuite-components"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "marked": "^16.3.0",
+    "typedoc": "^0.28.20",
+    "typescript": "~5.8.3",
+    "vite": "^6.4.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SearSuite/searsuite-website.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SearSuite/searsuite-website/issues"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

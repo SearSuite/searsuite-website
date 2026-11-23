@@ -1,0 +1,12 @@
+{
+  "extends": "../searsuite/tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": [],
+    "paths": {
+      "@searsuite/*": ["../searsuite-browser/packages/*/src", "../searsuite-pro/packages/*/src", "../searsuite/packages/*/src"]
+    }
+  },
+  "include": ["../searsuite/packages/sear-*/src/index.ts", "../searsuite-browser/packages/sear-*/src/index.ts", "../searsuite-pro/packages/sear-assembly-headless/src/index.ts", "../searsuite-pro/packages/sear-node-adapters/src/index.ts"],
+  "exclude": ["../searsuite/packages/sear-host-*", "../searsuite/packages/sear-integration-*"]
+}

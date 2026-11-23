@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SearSuite — A composable toolkit for spreadsheet editors</title>
+    <meta
+      name="description"
+      content="SearSuite is an open-source toolkit for building spreadsheet editors from composable modules with explicit contracts."
+    />
+    <meta name="theme-color" content="#000000" />
+    <link rel="icon" type="image/png" href="/assets/searsuite-logo.png" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="%SITE_URL%%CANONICAL_PATH%" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="SearSuite" />
+    <meta property="og:title" content="SearSuite — A composable toolkit for spreadsheet editors" />
+    <meta
+      property="og:description"
+      content="SearSuite is an open-source toolkit for building spreadsheet editors from composable modules with explicit contracts."
+    />
+    <meta property="og:url" content="%SITE_URL%%CANONICAL_PATH%" />
+    <meta property="og:image" content="%SITE_URL%/og-searsuite.png" />
+    <meta property="og:image:width" content="1248" />
+    <meta property="og:image:height" content="720" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="%SITE_URL%/og-searsuite.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "SearSuite",
+        "description": "SearSuite is an open-source toolkit for building spreadsheet editors from composable modules with explicit contracts.",
+        "programmingLanguage": "TypeScript",
+        "url": "%SITE_URL%"
+      }
+    </script>
+  </head>
+  <body class="home-page">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header" data-header>
+      <a class="brand" href="/" aria-label="SearSuite home">
+        <img class="brand-logo" src="/assets/searsuite-logo.png" alt="" width="32" height="32" />
+        <span>SearSuite</span>
+      </a>
+      <button class="menu-button" type="button" aria-label="Open navigation" aria-expanded="false" data-menu-button>
+        <span></span><span></span>
+      </button>
+      <nav class="site-nav" aria-label="Main navigation" data-menu>
+        <a href="/docs/quickstart/">Quickstart</a>
+        <a href="/docs/">Documentation</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="technical-grid" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+        <div class="hero-copy">
+          <h1 id="hero-title">A composable toolkit for building spreadsheet editors</h1>
+        </div>
+
+        <div class="workbench">
+          <iframe class="workbench-demo" src="/demo/canvas.html" title="Interactive SearSuite Workbook editor"></iframe>
+        </div>
+      </section>
+
+      <section class="intro-section" id="engine" aria-label="About SearSuite">
+        <p>
+          Mature editor toolkits already exist for rich-text documents. Yet developers building online spreadsheets often
+          still have to implement cell models, formulas, editing, and rendering within their own products. Even when
+          open-source editors are available, it may be difficult to use only the capabilities a product needs or adapt
+          them to a different runtime environment. Enterprises that purchase a complete product may face a large feature
+          set and a complex architecture; integrating it with existing systems and adapting it to business workflows can
+          also require costly, paid customization. SearSuite aims to make these foundational capabilities easier to reuse,
+          recombine, and integrate.
+        </p>
+        <p>
+          SearSuite contributes a collection of composable spreadsheet modules to the open-source ecosystem. Spreadsheet
+          state, commands, rendering, platform adapters, and optional features work together through
+          explicit contracts, allowing developers to select the parts they need, replace implementations independently,
+          or assemble their own editors. Enterprises can integrate these capabilities into existing business systems and
+          extend them themselves, without having to purchase an entire product or depend on paid customization by a
+          vendor. The modules are currently implemented in TypeScript; their clear contracts also provide a path for
+          porting them to other languages in the future.
+        </p>
+        <p>
+          SearSuite's underlying architecture supports AI-assisted editing, allowing people and AI agents to work on the
+          same spreadsheet through shared state and commands.
+        </p>
+
+        <h2>Features</h2>
+        <div class="feature-list">
+          <article>
+            <h3>Spreadsheet-grade foundation</h3>
+            <p>Matrices, formulas, selections, structure changes, and rich cells work as reusable infrastructure.</p>
+          </article>
+          <article>
+            <h3>Platform-neutral core</h3>
+            <p>Domain and runtime contracts stay independent from host-native input, rendering, and storage APIs.</p>
+          </article>
+          <article>
+            <h3>One editor architecture</h3>
+            <p>
+              Spreadsheet features share typed commands, observations, plugins, and lifecycle rules.
+            </p>
+          </article>
+          <article>
+            <h3>Composable runtimes</h3>
+            <p>
+              Assemblies and adapters can target web, headless, desktop, or future hosts without reshaping the domain.
+            </p>
+          </article>
+          <article>
+            <h3>Feature-owned extensions</h3>
+            <p>Plugins own their state, commands, export, collaboration, and rendering contributions.</p>
+          </article>
+          <article>
+            <h3>Collaboration ready</h3>
+            <p>Revision, acknowledgement, catch-up, and rebase follow one host-neutral transaction model.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="about-section" id="about" aria-labelledby="about-title">
+        <h2 id="about-title">About</h2>
+        <div>
+          <p>
+            SearSuite is open-source software released under the MIT License. You may use it free of charge, including
+            for commercial purposes, subject to the license terms.
+          </p>
+          <p>
+            For bug reports, pull requests, and feedback, please visit
+            <a href="https://github.com/MagnetoLee/searsuite">GitHub</a>.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer-inner">
+        <nav class="site-footer-nav" aria-label="Footer navigation">
+          <a class="brand" href="/" aria-label="SearSuite home">
+            <img class="brand-logo" src="/assets/searsuite-logo.png" alt="" width="32" height="32" />
+            <span>SearSuite</span>
+          </a>
+          <div class="site-footer-links">
+            <a href="/docs/">Documentation</a>
+            <a href="/docs/ref/">API</a>
+            <a href="/blog/">Blog</a>
+            <a href="https://github.com/MagnetoLee/searsuite">Code</a>
+          </div>
+        </nav>
+        <a
+          class="public-security-record"
+          href="https://beian.mps.gov.cn/#/query/webSearch?code=11010502063440"
+          rel="noreferrer"
+          target="_blank"
+          >京公网安备11010502063440号</a
+        >
+      </div>
+    </footer>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

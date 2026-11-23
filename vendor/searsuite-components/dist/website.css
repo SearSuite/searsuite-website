@@ -1,0 +1,205 @@
+@import './styles.css';
+
+html { scroll-behavior: smooth; }
+body { margin: 0; }
+body.searsuite { --searsuite-header-height: 72px; }
+.searsuite [hidden] { display: none !important; }
+.searsuite .searsuite-header-inner { justify-content: flex-start; }
+.searsuite-site-navigation { display: flex; align-items: center; gap: 8px; }
+.searsuite .searsuite-header .searsuite-site-navigation { margin-left: auto; }
+.searsuite-site-navigation a { color: var(--searsuite-muted); padding: 8px 11px; border-radius: 6px; font-weight: 600; }
+.searsuite-site-navigation a:hover, .searsuite-site-navigation a.is-current { color: var(--searsuite-fg); background: var(--searsuite-canvas); text-decoration: none; }
+.searsuite .searsuite-footer { flex-wrap: wrap; }
+.searsuite .public-security-record { color: var(--searsuite-muted); margin-left: auto; }
+.searsuite .searsuite-main { min-width: 0; }
+.searsuite pre { background: var(--searsuite-canvas); border: 1px solid var(--searsuite-border); border-radius: 6px; padding: 16px 20px; overflow-x: auto; line-height: 1.55; }
+.searsuite pre.searsuite-code-block { font-size: 13px; line-height: 1.65; }
+.searsuite pre code { background: var(--searsuite-clear); padding: 0; font-size: 13px; white-space: pre; }
+.searsuite-code-block .token.keyword { color: var(--searsuite-syntax-keyword); }
+.searsuite-code-block .token.string,
+.searsuite-code-block .token.char { color: var(--searsuite-syntax-string); }
+.searsuite-code-block .token.number { color: var(--searsuite-syntax-number); }
+.searsuite-code-block .token.comment { color: var(--searsuite-syntax-comment); }
+.searsuite-code-block .token.definition { color: var(--searsuite-syntax-definition); }
+.searsuite-code-block .language-bash .token.function { color: var(--searsuite-syntax-definition); }
+.searsuite-code-block .token.boolean,
+.searsuite-code-block .token.constant { color: var(--searsuite-syntax-atom); }
+.searsuite-code-block .token.class-name { color: var(--searsuite-syntax-type); }
+.searsuite-code-block .token.regex { color: var(--searsuite-syntax-regexp); }
+.searsuite code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .88em; background: var(--searsuite-canvas); border-radius: 4px; padding: 2px 4px; }
+.searsuite blockquote { margin: 20px 0; padding: 2px 20px; border-left: 3px solid var(--searsuite-border); color: var(--searsuite-muted); }
+.searsuite table { width: 100%; border-collapse: collapse; display: block; overflow-x: auto; }
+.searsuite th, .searsuite td { padding: 9px 12px; border: 1px solid var(--searsuite-border); text-align: left; vertical-align: top; }
+.searsuite th { background: var(--searsuite-canvas); }
+.searsuite input[type='search'] { width: 100%; max-width: 520px; padding: 9px 12px; border: 1px solid var(--searsuite-border); border-radius: 6px; background: var(--searsuite-surface); }
+
+/* The source site supplies the text and rich article markup. These rules place it in the component library's layout. */
+.home-page .hero, .home-page .intro-section, .home-page .about-section { max-width: 1160px; margin: 0 auto; padding: 56px 36px; }
+.home-page .hero { padding-top: 50px; padding-bottom: 24px; }
+.home-page .hero h1 { max-width: 1100px; font-size: 48px; line-height: 1.15; margin: 0 0 28px; }
+.home-page .technical-grid { display: none; }
+.searsuite-demo-frame { padding: 10px; border: 1px solid var(--searsuite-border); border-radius: 9px; background: var(--searsuite-canvas); box-shadow: 0 10px 30px var(--searsuite-website-shadow); }
+.searsuite-demo-frame .workbench-demo { display: block; width: 100%; height: clamp(400px, calc(100dvh - 340px), 680px); border: 0; border-radius: 5px; background: var(--searsuite-surface); }
+.home-page .about-section { border-top: 1px solid var(--searsuite-border); }
+.home-page .intro-section > p, .home-page .about-section p { max-width: 850px; font-size: 17px; line-height: 1.7; color: var(--searsuite-neutral-700); }
+.home-page .about-section p { max-width: none; }
+.home-page .intro-section > h2, .home-page .about-section h2 { font-size: 28px; margin: 46px 0 20px; }
+.searsuite-feature-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.searsuite-feature-card { padding: 21px; border: 1px solid var(--searsuite-border); border-radius: 7px; }
+.searsuite a.searsuite-feature-card { display: block; color: var(--searsuite-fg); }
+.searsuite a.searsuite-feature-card:hover { background: var(--searsuite-canvas); border-color: var(--searsuite-neutral-400); text-decoration: none; }
+.searsuite-feature-card h3 { margin: 0 0 9px; font-size: 17px; }
+.searsuite-feature-card p { margin: 0; color: var(--searsuite-muted); line-height: 1.55; }
+.home-page .about-section { padding-top: 40px; padding-bottom: 80px; }
+.home-page .about-section h2 { margin-top: 0; }
+
+.docs-landing, .blog-layout { width: min(930px, calc(100% - 48px)); margin: 0 auto; padding: 55px 0 90px; }
+.docs-landing-intro, .blog-intro { padding-bottom: 24px; border-bottom: 1px solid var(--searsuite-border); }
+.docs-landing-intro h1, .blog-intro h1 { font-size: clamp(32px, 4vw, 44px); line-height: 1.2; margin: 0 0 18px; }
+.docs-landing-intro > p:last-child, .blog-intro > p:last-child { max-width: 750px; font-size: 18px; line-height: 1.65; color: var(--searsuite-neutral-700); }
+.searsuite .eyebrow { color: var(--searsuite-muted); font-size: 13px; font-weight: 600; }
+.docs-destinations { margin: 28px 0; }
+.docs-destinations[data-searsuite-component="DestinationList"] { display: grid; gap: 12px; }
+.searsuite-destination-link { display: grid; grid-template-columns: 40px 1fr 20px; align-items: center; gap: 15px; padding: 19px 22px; border: 1px solid var(--searsuite-border); border-radius: 7px; color: var(--searsuite-fg); }
+.searsuite-destination-link:hover, .blog-list-item:hover { text-decoration: none; background: var(--searsuite-canvas); border-color: var(--searsuite-neutral-400); }
+.searsuite-destination-link strong, .searsuite-destination-link small { display: block; }
+.searsuite-destination-link strong { font-size: 18px; }
+.searsuite-destination-link small, .destination-index { color: var(--searsuite-muted); }
+.searsuite-destination-link small { margin-top: 3px; font-size: 14px; }
+.docs-source-note { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; padding: 0; font-size: 14px; line-height: 1.6; color: var(--searsuite-muted); }
+.docs-source-note strong { color: var(--searsuite-fg); }
+.quickstart-content { max-width: 760px; }
+.quickstart-content section { margin: 36px 0 46px; }
+.quickstart-content h2 { font-size: 26px; }
+.quickstart-content p, .manual-article p, .reference-article p, .blog-prose p { font-size: 16px; line-height: 1.7; }
+.quickstart-page .docs-landing, .guide-page .manual-layout { width: 100%; max-width: 1600px; padding: 0; }
+:is(.quickstart-page, .guide-page) .manual-article { box-sizing: border-box; width: min(100%, 920px); }
+:is(.quickstart-page, .guide-page) .manual-sidebar { display: block; grid-row: 1; align-self: stretch; position: relative; top: auto; max-height: none; overflow: visible; }
+:is(.quickstart-page, .guide-page) .searsuite-toc-inner { position: sticky; top: calc(var(--searsuite-header-height) + 30px); max-height: calc(100vh - var(--searsuite-header-height) - 30px); overflow: auto; }
+.guide-page .manual-article h3[id] { scroll-margin-top: calc(var(--searsuite-header-height) + 18px); }
+
+.manual-layout, .reference-layout { max-width: 1600px; }
+.manual-sidebar, .reference-sidebar { position: sticky; top: var(--searsuite-header-height); align-self: start; max-height: calc(100vh - var(--searsuite-header-height)); overflow: auto; padding: 30px 20px; }
+.manual-sidebar > p { margin: 0 0 15px; font-size: 18px; font-weight: 650; }
+.manual-sidebar a:not(.searsuite-toc-link) { display: block; color: var(--searsuite-muted); font-size: 13px; line-height: 1.45; padding: 6px 10px; border-radius: 5px; overflow-wrap: anywhere; }
+.manual-sidebar a:not(.searsuite-toc-link):hover, .manual-sidebar a:not(.searsuite-toc-link).is-active { background: var(--searsuite-canvas); color: var(--searsuite-blue); text-decoration: none; }
+.reference-page .reference-sidebar { display: block; grid-row: 1; align-self: stretch; position: relative; top: auto; max-height: none; overflow: visible; }
+.reference-page .reference-sidebar .searsuite-toc-inner { position: sticky; top: calc(var(--searsuite-header-height) + 30px); max-height: calc(100vh - var(--searsuite-header-height) - 30px); overflow: auto; }
+.manual-article, .reference-article { max-width: 1060px; padding: 40px clamp(24px, 4vw, 64px) 90px; min-width: 0; }
+.manual-article { max-width: 920px; }
+.manual-article section { margin-bottom: 60px; }
+.manual-article h1, .reference-article h1 { font-size: clamp(30px, 3vw, 39px); line-height: 1.25; }
+.manual-article h2, .reference-article h2 { font-size: 26px; border-bottom: 1px solid var(--searsuite-border); padding-bottom: 12px; }
+.manual-article h3, .reference-article h3 { font-size: 20px; }
+.manual-article ul, .manual-article ol, .reference-article ul, .reference-article ol { padding-left: 26px; line-height: 1.65; }
+.manual-article li, .reference-article li { margin-bottom: 8px; }
+.module-architecture { margin: 30px 0 0; }
+.module-architecture-scroll { width: 100%; overflow-x: auto; }
+.module-architecture svg { display: block; width: 100%; min-width: 740px; height: auto; }
+.module-architecture-links { fill: none; stroke: var(--searsuite-neutral-500); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.module-architecture marker path { fill: var(--searsuite-neutral-500); }
+.module-architecture-labels text { fill: var(--searsuite-muted); font-size: 12px; text-anchor: middle; paint-order: stroke; stroke: var(--searsuite-surface); stroke-width: 8px; stroke-linejoin: round; }
+.module-architecture-node rect { stroke-width: 1.5; }
+.module-architecture-host rect { fill: var(--searsuite-surface); stroke: var(--searsuite-neutral-400); }
+.module-architecture-assembly rect { fill: var(--searsuite-primary-50); stroke: var(--searsuite-primary-500); }
+.module-architecture-plugin rect { fill: var(--searsuite-success-50); stroke: var(--searsuite-success-500); }
+.module-architecture-render rect { fill: var(--searsuite-warning-50); stroke: var(--searsuite-warning-500); }
+.module-architecture-editor rect { fill: var(--searsuite-primary-50); stroke: var(--searsuite-primary-500); }
+.module-architecture-domain rect { fill: var(--searsuite-surface); stroke: var(--searsuite-neutral-400); }
+.module-architecture-foundation rect { fill: var(--searsuite-canvas); stroke: var(--searsuite-neutral-400); }
+.module-architecture-node text { fill: var(--searsuite-fg); text-anchor: middle; letter-spacing: 0; }
+.module-architecture-name { font-size: 19px; font-weight: 650; }
+.module-architecture-detail { font-size: 14px; }
+.module-architecture-mobile { display: none; }
+.reference-package { margin: 35px 0; }
+.reference-detail-chapter { margin: 70px 0 0; }
+.reference-detail-chapter:first-child { margin-top: 24px; }
+.reference-detail-chapter > header h2 { margin-bottom: 20px; }
+.reference-detail-chapter .reference-package { margin: 0; padding: 34px 0 42px; scroll-margin-top: calc(var(--searsuite-header-height) + 20px); }
+.reference-detail-chapter .reference-package + .reference-package { border-top: 1px solid var(--searsuite-border); }
+.reference-package-header h3 { margin: 0 0 5px; font-size: 22px; overflow-wrap: anywhere; }
+.reference-package-header p { margin: 0; color: var(--searsuite-muted); line-height: 1.6; }
+.reference-symbol-section { margin: 22px 0; }
+.reference-symbol-section > header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; }
+.reference-symbol-section > header h3 { margin: 0; }
+.reference-symbol-section [data-reference-symbol] { border-bottom: 1px solid var(--searsuite-border); padding: 12px 0; }
+.reference-back { display: inline-block; margin-bottom: 14px; }
+.reference-package-page .reference-article { max-width: 1120px; }
+.reference-page .reference-layout { box-sizing: border-box; width: 100%; }
+.reference-page .reference-article { overflow-wrap: anywhere; }
+.reference-package-page .searsuite-article-header h1 { overflow-wrap: anywhere; }
+.reference-page .reference-concept h4, .reference-page .reference-symbol-section > header h4 { margin: 20px 0 10px; font-size: 17px; }
+.reference-page .symbol-list { margin: 0; padding: 0; }
+.reference-page .symbol { padding: 18px 0 24px; scroll-margin-top: calc(var(--searsuite-header-height) + 20px); }
+.reference-page .symbol + .symbol { border-top: 1px solid var(--searsuite-border); }
+.reference-page .symbol dt { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin: 0 0 8px; }
+.reference-page .symbol dt > a:not(.source-link) { min-width: 0; max-width: 100%; overflow-wrap: anywhere; font-size: 18px; font-weight: 650; text-decoration: none; }
+.reference-page .symbol-kind { color: var(--searsuite-muted); font-size: 12px; font-weight: 600; text-transform: lowercase; }
+.reference-page .symbol dd { margin-left: 0; }
+.reference-page .symbol-signatures, .reference-page .member-signatures { margin: 6px 0; overflow-wrap: anywhere; }
+.reference-page .symbol-signatures > code, .reference-page .member-signatures > code { display: block; font-size: 13px; line-height: 1.6; }
+.reference-page .reference-documentation { margin: 8px 0; }
+.reference-page .reference-documentation > p { margin: 8px 0; }
+.reference-page .reference-tag { display: flex; flex-wrap: wrap; gap: 4px 10px; margin: 10px 0; }
+.reference-page .reference-tag strong { min-width: 58px; }
+.reference-page .reference-example { margin: 16px 0; }
+.reference-page .reference-example > strong { display: block; margin-bottom: 8px; font-size: 13px; }
+.reference-page .reference-example pre.searsuite-code-block { margin: 0; }
+.reference-page .symbol-members { margin: 14px 0 0 16px; }
+.reference-page .symbol-member > header { display: flex; flex-wrap: wrap; gap: 6px; align-items: baseline; }
+.reference-page .symbol-member > header a, .reference-page .symbol-member > header code { min-width: 0; overflow-wrap: anywhere; }
+.reference-page .reference-parameters { margin-left: 16px; }
+.reference-page .reference-members { margin-top: 12px; }
+.reference-page .reference-members > summary { color: var(--searsuite-blue); cursor: pointer; font-size: 13px; font-weight: 600; }
+.reference-page .reference-members > summary span { color: var(--searsuite-muted); font-weight: 400; }
+
+.blog-list { margin-top: 28px; }
+.blog-list-item { display: grid; grid-template-columns: 150px 1fr 20px; gap: 20px; align-items: center; padding: 20px 10px; border-bottom: 1px solid var(--searsuite-border); color: var(--searsuite-fg) !important; }
+.blog-list-item time, .blog-list-item small { color: var(--searsuite-muted); }
+.blog-list-item strong, .blog-list-item small { display: block; }
+.blog-list-item strong { font-size: 18px; }
+.blog-back { display: inline-block; margin-bottom: 28px; }
+.blog-article { max-width: 760px; }
+.blog-article-header { border-bottom: 1px solid var(--searsuite-border); padding-bottom: 20px; }
+.blog-article-header time { color: var(--searsuite-muted); }
+.blog-article-header h1 { font-size: 40px; margin: 9px 0 0; }
+.blog-prose { padding-top: 25px; }
+
+@media (max-width: 900px) {
+  .searsuite-feature-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .manual-layout, .reference-layout { grid-template-columns: 230px minmax(0, 1fr); }
+  .searsuite-shell.searsuite-resizable-shell { --searsuite-sidebar-default: 230px; }
+}
+@media (max-width: 700px) {
+  .searsuite .searsuite-header-inner { height: auto; min-height: 62px; flex-wrap: wrap; padding: 12px 16px; }
+  .searsuite .searsuite-header .searsuite-site-navigation { width: 100%; margin: 0; overflow-x: auto; white-space: nowrap; }
+  .searsuite-site-navigation a { padding: 6px 8px; }
+  .home-page .hero, .home-page .intro-section, .home-page .about-section { padding: 38px 20px; }
+  .home-page .hero { padding-bottom: 24px; }
+  .home-page .hero h1 { font-size: 36px; }
+  .searsuite-demo-frame .workbench-demo { height: clamp(340px, calc(100dvh - 380px), 500px); }
+  .searsuite-feature-list { grid-template-columns: 1fr; }
+  .manual-layout, .reference-layout { display: block; }
+  body.searsuite .manual-sidebar, body.searsuite .reference-sidebar { display: block; position: static; top: auto; bottom: auto; left: auto; width: auto; max-height: 220px; transform: none; box-shadow: none; overflow: auto; border-right: 0; border-bottom: 1px solid var(--searsuite-border); padding: 18px 20px; }
+  body.searsuite.reference-page .reference-sidebar { max-height: 220px; overflow: auto; }
+  .reference-page .reference-sidebar .searsuite-toc-inner { position: static; max-height: none; overflow: visible; }
+  :is(.quickstart-page, .guide-page) .searsuite-toc-inner { position: static; max-height: none; overflow: visible; }
+  .manual-article, .reference-article { padding: 28px 20px 70px; }
+  .guide-page .manual-article h3[id] { scroll-margin-top: 118px; }
+  .module-architecture-scroll { display: none; }
+  .manual-article .module-architecture-mobile { display: grid; gap: 12px; }
+  .module-architecture-mobile-node { min-width: 0; padding: 13px 12px; border: 1px solid var(--searsuite-neutral-400); border-radius: 6px; text-align: center; }
+  .module-architecture-mobile-node strong, .module-architecture-mobile-node span, .module-architecture-mobile-node small { display: block; }
+  .module-architecture-mobile-node strong { font-size: 15px; line-height: 1.35; }
+  .module-architecture-mobile-node span { margin-top: 4px; font-size: 12px; line-height: 1.4; }
+  .module-architecture-mobile-node small { margin-bottom: 8px; color: var(--searsuite-muted); font-size: 11px; line-height: 1.35; }
+  .module-architecture-mobile-branches { display: grid; gap: 8px; padding: 12px 0; border-block: 1px solid var(--searsuite-neutral-400); }
+  .module-architecture-mobile-branches .module-architecture-assembly, .module-architecture-mobile > .module-architecture-editor { background: var(--searsuite-primary-50); border-color: var(--searsuite-primary-500); }
+  .module-architecture-mobile-branches .module-architecture-plugin { background: var(--searsuite-success-50); border-color: var(--searsuite-success-500); }
+  .module-architecture-mobile-branches .module-architecture-render { background: var(--searsuite-warning-50); border-color: var(--searsuite-warning-500); }
+  .module-architecture-mobile > .module-architecture-foundation { background: var(--searsuite-canvas); }
+  .module-architecture-mobile-link { color: var(--searsuite-muted); font-size: 12px; text-align: center; }
+  .docs-landing, .blog-layout { width: calc(100% - 40px); padding-top: 36px; }
+  .blog-list-item { grid-template-columns: 1fr 20px; gap: 8px; }
+  .blog-list-item time { grid-column: 1 / -1; }
+}

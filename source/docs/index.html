@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SearSuite Documentation</title>
+    <meta
+      name="description"
+      content="Explore the spreadsheet infrastructure behind SearSuite, designed for people and AI agents to work through shared, structured operations."
+    />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" type="image/png" href="/assets/searsuite-logo.png" />
+    <link rel="canonical" href="%SITE_URL%%CANONICAL_PATH%" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <meta property="og:title" content="SearSuite documentation" />
+    <meta
+      property="og:description"
+      content="Explore the spreadsheet infrastructure behind SearSuite, designed for people and AI agents to work through shared, structured operations."
+    />
+    <meta property="og:url" content="%SITE_URL%%CANONICAL_PATH%" />
+    <meta property="og:image" content="%SITE_URL%/og-searsuite.png" />
+  </head>
+  <body class="docs-page docs-home-page">
+    <header class="site-header docs-header">
+      <a class="brand" href="/"
+        ><img class="brand-logo" src="/assets/searsuite-logo.png" alt="" width="32" height="32" /><span
+          >SearSuite</span
+        ></a
+      >
+      <nav class="site-nav docs-nav" aria-label="Documentation navigation">
+        <a href="/docs/quickstart/">Quickstart</a
+        ><a class="is-current" href="/docs/" aria-current="page">Documentation</a>
+      </nav>
+    </header>
+    <main class="docs-landing">
+      <header class="docs-landing-intro">
+        <p class="eyebrow"><span></span>Documentation</p>
+        <h1>Documentation</h1>
+        <p>
+          SearSuite provides composable spreadsheet modules for applications where people and AI agents edit through a
+          shared model. Sheet state, commands, rendering, platform adapters, and optional features have explicit
+          boundaries, so you can choose and replace the pieces your product needs. The code is currently written in
+          TypeScript; those same contracts provide a path to other runtimes.
+        </p>
+      </header>
+      <nav class="docs-destinations" aria-label="Documentation sections">
+        <a href="/docs/quickstart/"
+          ><strong>Quickstart</strong><small>Install from npm and run an editable spreadsheet in your browser.</small></a
+        >
+        <a href="/docs/guide/"
+          ><strong>Library guide</strong
+          ><small>Learn the concepts, module responsibilities, and how the parts work together.</small></a
+        >
+        <a href="/docs/ref/"
+          ><strong>Reference manual</strong
+          ><small>Find public exports and signatures, grouped by package and linked to their source.</small></a
+        >
+      </nav>
+      <aside class="docs-source-note">
+        <strong>Other resources</strong>
+        <span
+          ><a href="/blog/">Blog posts</a> about the project and
+          <a href="https://github.com/MagnetoLee/searsuite">source code</a> on GitHub.</span
+        >
+      </aside>
+    </main>
+    <script type="module" src="/src/docs.ts"></script>
+  </body>
+</html>
