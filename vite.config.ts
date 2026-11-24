@@ -6,7 +6,7 @@ const siteUrl = 'https://searsuite.com';
 const blogPosts = JSON.parse(readFileSync(resolve(import.meta.dirname, 'blog/posts.json'), 'utf8')) as Array<{
   slug: string;
 }>;
-const packageRoots = ['../searsuite-browser/packages', '../searsuite-pro/packages', '../searsuite/packages']
+const packageRoots = ['../searsuite-browser/packages', '../searsuite/packages']
   .map((path) => resolve(import.meta.dirname, path));
 const workspaceAliases = packageRoots.flatMap((packagesRoot) => readdirSync(packagesRoot, { withFileTypes: true })
   .filter((entry) => entry.isDirectory() && existsSync(resolve(packagesRoot, entry.name, 'src/index.ts')))

@@ -6,7 +6,7 @@ import { marked } from 'marked';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const coreRoot = resolve(root, '../searsuite');
-const packageRoots = [coreRoot, resolve(root, '../searsuite-browser'), resolve(root, '../searsuite-pro')];
+const packageRoots = [coreRoot, resolve(root, '../searsuite-browser')];
 const sourceRoot = resolve(root, 'source');
 const reflection = JSON.parse(readFileSync(resolve(root, '.generated/typedoc.json'), 'utf8'));
 const sourcePath = (fileName) => fileName.replace(/^searsuite(?:-browser|-pro)?\//, '');

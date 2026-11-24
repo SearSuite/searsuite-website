@@ -2,7 +2,7 @@
 
 The site uses `searsuite-components` for its header, footer, navigation, cards, lists, articles, sidebars, sections, demo frame, and back-to-top control. The workbook canvas is rendered by the SearSuite editor.
 
-`source/` owns the page templates, blog posts, demo, and static assets. The sibling `../searsuite`, `../searsuite-browser`, and `../searsuite-pro` checkouts supply editor source, host adapters, and API comments. Install dependencies in those repositories and here. `pnpm run sync` generates the guide, quickstart, blog, and API reference from those inputs, then renders the component-based pages in this repository. Generated pages are ignored by Git.
+`source/` owns the page templates, blog posts, demo, and static assets. The sibling `../searsuite` and `../searsuite-browser` checkouts supply editor source, host adapters, and API comments. Install dependencies in those repositories and here. `pnpm run sync` generates the guide, quickstart, blog, and API reference from those inputs, then renders the component-based pages in this repository. Generated pages are ignored by Git.
 
 ```sh
 pnpm install

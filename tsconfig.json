@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@searsuite/*": ["../searsuite-browser/packages/*/src", "../searsuite-pro/packages/*/src", "../searsuite/packages/*/src"]
+      "@searsuite/*": ["../searsuite-browser/packages/*/src", "../searsuite/packages/*/src"]
     },
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "noEmit": true,

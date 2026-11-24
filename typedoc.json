@@ -1,6 +1,6 @@
 {
   "$schema": "https://typedoc.org/schema.json",
-  "entryPoints": ["../searsuite/packages/sear-*/src/index.ts", "../searsuite-browser/packages/sear-*/src/index.ts", "../searsuite-pro/packages/sear-assembly-headless/src/index.ts", "../searsuite-pro/packages/sear-node-adapters/src/index.ts"],
+  "entryPoints": ["../searsuite/packages/sear-*/src/index.ts", "../searsuite-browser/packages/sear-*/src/index.ts"],
   "entryPointStrategy": "expand",
   "exclude": ["../searsuite/packages/sear-host-*/**", "../searsuite/packages/sear-integration-*/**"],
   "tsconfig": "typedoc.tsconfig.json",

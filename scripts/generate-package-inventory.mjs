@@ -120,11 +120,11 @@ function manifest(relative) {
 }
 
 function environment(repo, relative) {
+  if (relative.endsWith('sear-assembly-headless') || relative.endsWith('sear-node-adapters')) return 'Node';
   if (repo === 'searsuite') return '平台无关';
   if (repo === 'searsuite-browser' || repo === 'searsuite-components' || repo === 'searsuite-example' || repo === 'searsuite-website' || relative.endsWith('/examples')) return '浏览器';
   if (repo === 'searsuite-test') return '测试环境';
   if (repo === 'searsuite-pro') {
-    if (relative.endsWith('sear-assembly-headless') || relative.endsWith('sear-node-adapters')) return 'Node';
     return relative.endsWith('web-toolbar-pro') ? '浏览器' : '平台无关';
   }
   return 'Node';
