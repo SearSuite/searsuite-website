@@ -1,15 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const base = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
+const base = path.resolve(import.meta.dirname, '../..');
 const repositories = [
   ['searsuite', 'Core', '平台无关的编辑器核心与插件'],
   ['searsuite-browser', 'Browser', '浏览器适配与 Web 控件'],
   ['searsuite-components', 'Components', '网站组件库'],
-  ['searsuite-example', 'Example', '浏览器演示宿主'],
-  ['searsuite-pro', 'Pro', '扩展功能与组合入口'],
-  ['searsuite-cloud', 'Cloud', '云端应用与协作服务'],
-  ['searsuite-test', 'Test', '独立测试与验证资产'],
   ['searsuite-website', 'Website', '官网与文档站'],
 ];
 
@@ -96,23 +92,10 @@ const purposes = {
   'sear-plugin-web-doc-toolbar': '提供文档编辑器的 Web 工具栏。',
   'sear-plugin-web-sheet-tabbar': '提供 Web 工作表标签和结构控制。',
   'sear-plugin-web-toolbar': '提供由命令和观察驱动的 Web 工作表工具栏。',
-  'sear-assembly-pro': '组合 Pro 插件并注册其文档编解码器。',
-  'sear-plugin-cell-data-visual': '提供数据条、色阶和图标集等单元格可视化规则。',
-  'sear-plugin-chart': '管理图表定义、数据、渲染、命令、导出和协作。',
-  'sear-plugin-pivot-table': '管理数据透视表定义、聚合报表、命令和协作。',
-  'sear-plugin-web-toolbar-pro': '提供 Pro 功能对应的 Web 工作表控件。',
-  'sear-host-server-node': '运行云端 Node 协作服务。',
   'sear-assembly-headless': '在没有可视宿主的环境中组装工作表编辑器。',
   'sear-node-adapters': '提供 Node 平台计时和 Web 服务适配器。',
-  'assembly-test': '提供编辑器装配夹具和核心运行时回归测试。',
-  'bugs': '执行已记录 Bug 的浏览器回归用例。',
-  'formula': '保存公式兼容性用例并运行无界面质量门禁。',
-  'integration': '执行浏览器集成和滚动性能测试。',
-  'workbook-files': '验证工作簿文件、CSV / XLSX 读写与运行时接入。',
   'searsuite-components': '提供官网与文档站复用的 React 组件、图标和样式。',
-  'searsuite-example': '运行 Canvas、SVG、WebGL 等浏览器编辑器示例。',
   'searsuite-website': '构建官网、指南和由源码生成的 API 参考。',
-  'cloud-examples': '运行云端应用的浏览器示例。',
 };
 
 function manifest(relative) {
@@ -122,36 +105,25 @@ function manifest(relative) {
 function environment(repo, relative) {
   if (relative.endsWith('sear-assembly-headless') || relative.endsWith('sear-node-adapters')) return 'Node';
   if (repo === 'searsuite') return '平台无关';
-  if (repo === 'searsuite-browser' || repo === 'searsuite-components' || repo === 'searsuite-example' || repo === 'searsuite-website' || relative.endsWith('/examples')) return '浏览器';
-  if (repo === 'searsuite-test') return '测试环境';
-  if (repo === 'searsuite-pro') {
-    return relative.endsWith('web-toolbar-pro') ? '浏览器' : '平台无关';
-  }
-  return 'Node';
+  return '浏览器';
 }
 
 const packages = [];
 for (const [repo] of repositories) {
-  const root = manifest(repo);
-  const childPaths = [];
-  for (const folder of ['packages', 'modules']) {
-    const dir = path.join(base, repo, folder);
-    if (!fs.existsSync(dir)) continue;
-    for (const entry of fs.readdirSync(dir).sort()) {
-      if (fs.existsSync(path.join(dir, entry, 'package.json'))) childPaths.push(`${repo}/${folder}/${entry}`);
-    }
-  }
-  if (repo === 'searsuite-cloud') childPaths.push(`${repo}/examples`);
-  const listed = childPaths.length ? childPaths : [repo];
+  const listed = repo === 'searsuite' || repo === 'searsuite-browser'
+    ? fs.readdirSync(path.join(base, repo, 'packages'), { withFileTypes: true })
+        .filter(entry => entry.isDirectory() && fs.existsSync(path.join(base, repo, 'packages', entry.name, 'package.json')))
+        .map(entry => `${repo}/packages/${entry.name}`).sort()
+    : [repo];
   for (const relative of listed) {
     const meta = manifest(relative);
+    if (meta.private && repo !== 'searsuite-website') continue;
     const leaf = path.basename(relative);
-    const key = relative === 'searsuite-cloud/examples' ? 'cloud-examples' : leaf;
     packages.push({
       id: relative,
       repo,
       name: meta.name || leaf,
-      purpose: purposes[key] || meta.description || '职责待核对',
+      purpose: purposes[leaf] || meta.description || '职责待核对',
       environment: environment(repo, relative),
       kind: relative === repo ? '仓库根包' : '子包',
       private: !!meta.private,
@@ -178,7 +150,6 @@ for (const source of packages) {
       const targets = byName.get(targetName);
       if (!targets) continue;
       source.outgoing.push({ name: targetName, type: label });
-      // Duplicate package names may occur in two example hosts; no current consumer targets those hosts.
       for (const target of targets) target.incoming.push({ id: source.id, name: source.name, repo: source.repo, type: label });
     }
   }
@@ -210,8 +181,8 @@ main{min-width:0}.intro{padding:0 0 26px}.eyebrow{color:#168178;font-size:11px;f
 </style>
 </head>
 <body>
-<header class="top"><div class="top-inner"><div class="mark" aria-hidden="true">S</div><div class="title"><h1>仓库包清单</h1><p>SearSuite workspace · 2026-11-21</p></div><input id="search" class="search" type="search" placeholder="搜索包名、职责或引用仓库" aria-label="搜索包"></div></header>
-<div class="shell"><aside class="side"><p class="side-label">REPOSITORIES</p><nav id="nav" class="nav" aria-label="仓库筛选"></nav><p class="side-note">引用数据来自这 ${repositories.length} 个仓库的 package.json，展示直接依赖声明。实际运行时调用、间接依赖和外部消费者不计入。</p></aside><main><section class="intro"><span class="eyebrow">Package inventory</span><h2>仓库、职责与引用范围</h2><p>按当前本地工作区扫描。子包以 packages/、modules/ 或 Cloud 的 examples/ 中的 package.json 为准；单包仓库列为“仓库根包”。Website 内 vendored 的组件库副本不重复计数。</p><div id="stats" class="stats"></div></section><section><div class="toolbar"><h3 id="section-title">全部包</h3><div class="toggle" role="group" aria-label="包类型"><button data-kind="all" aria-pressed="true">全部</button><button data-kind="子包" aria-pressed="false">子包</button><button data-kind="仓库根包" aria-pressed="false">根包</button></div><span id="count" class="count"></span></div><div class="table-wrap"><table class="table"><thead><tr><th>包名 / 路径</th><th>作用</th><th>运行范围</th><th>直接引用</th></tr></thead><tbody id="rows"></tbody></table><div id="empty" class="empty" hidden>没有匹配的包</div></div><p class="footnote">“直接引用”只统计当前清单内其他包对该包的 dependencies、devDependencies 和 peerDependencies。0 条表示清单中没有依赖声明，不等于该包未被使用。包名相同时请以路径区分。</p></section></main></div>
+<header class="top"><div class="top-inner"><div class="mark" aria-hidden="true">S</div><div class="title"><h1>仓库包清单</h1><p>SearSuite 公开仓库</p></div><input id="search" class="search" type="search" placeholder="搜索包名、职责或引用仓库" aria-label="搜索包"></div></header>
+<div class="shell"><aside class="side"><p class="side-label">REPOSITORIES</p><nav id="nav" class="nav" aria-label="仓库筛选"></nav><p class="side-note">引用数据来自这 ${repositories.length} 个仓库的 package.json，展示直接依赖声明。实际运行时调用、间接依赖和外部消费者不计入。</p></aside><main><section class="intro"><span class="eyebrow">Package inventory</span><h2>仓库、职责与引用范围</h2><p>清单包含 Core 和 Browser 的公开子包、Components 组件库，以及仅用于站点部署的 Website 根项目。</p><div id="stats" class="stats"></div></section><section><div class="toolbar"><h3 id="section-title">全部包</h3><div class="toggle" role="group" aria-label="包类型"><button data-kind="all" aria-pressed="true">全部</button><button data-kind="子包" aria-pressed="false">子包</button><button data-kind="仓库根包" aria-pressed="false">根包</button></div><span id="count" class="count"></span></div><div class="table-wrap"><table class="table"><thead><tr><th>包名 / 路径</th><th>作用</th><th>运行范围</th><th>直接引用</th></tr></thead><tbody id="rows"></tbody></table><div id="empty" class="empty" hidden>没有匹配的包</div></div><p class="footnote">“直接引用”只统计当前清单内其他包对该包的 dependencies、devDependencies 和 peerDependencies。0 条表示清单中没有依赖声明，不等于该包未被使用。包名相同时请以路径区分。</p></section></main></div>
 <script>const DATA=${data};
 const state={repo:'all',kind:'all',query:''};
 const byId=id=>document.getElementById(id);
