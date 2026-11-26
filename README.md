@@ -17,8 +17,6 @@ The npm Quickstart covers Sheet, Workbook and Headless using the published `0.0.
 
 To regenerate the public package inventory, place the public `searsuite-components` checkout beside Core, Browser and Website, then run `node scripts/generate-package-inventory.mjs` from Website.
 
-The site build reads sibling source from the public Core and Browser repositories. Configure the GitHub repository's `production` environment and the `SERVER_HOST`, `SERVER_PORT`, `SERVER_USER`, `SERVER_SSH_KEY`, and `SSH_KNOWN_HOSTS` secrets, then set `WEBSITE_DEPLOY_ENABLED` to `true` to enable deployment.
-
 ## Repository
 
 Repository: [searsuite-website](https://github.com/SearSuite/searsuite-website).
