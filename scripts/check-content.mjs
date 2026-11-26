@@ -87,9 +87,17 @@ for (const source of htmlFiles(sourceRoot)) {
     }
     if (body.hasClass('quickstart-page')) {
       const codeBlocks = $('article.searsuite-article pre[data-searsuite-component="CodeBlock"]');
-      if (codeBlocks.length !== 5 || !codeBlocks.find('code.language-bash').length ||
+      const sourcePage = cheerio.load(readFileSync(source, 'utf8'));
+      const expectedBlocks = sourcePage('pre[data-language]').length;
+      if (codeBlocks.length !== expectedBlocks || !codeBlocks.find('code.language-bash').length ||
           !codeBlocks.find('code.language-html').length || !codeBlocks.find('code.language-typescript').length) {
-        failures.push(`${name}: expected five highlighted Bash, HTML, and TypeScript CodeBlock components`);
+        failures.push(`${name}: expected ${expectedBlocks} highlighted Quickstart CodeBlock components`);
+      }
+      for (const id of ['single-sheet', 'headless', 'integration-notes']) {
+        if (!$(`article.searsuite-article #${id}`).length) failures.push(`${name}: missing npm entry #${id}`);
+      }
+      if (codeBlocks.toArray().some((block) => !$(block).find('code').text().trim())) {
+        failures.push(`${name}: found an empty Quickstart code block`);
       }
       for (const section of $('article.searsuite-article > .searsuite-article-body > section[id]').toArray()) {
         const id = $(section).attr('id');

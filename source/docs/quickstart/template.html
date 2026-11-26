@@ -6,7 +6,7 @@
     <title>SearSuite Quickstart — Install and use the npm packages</title>
     <meta
       name="description"
-      content="Install SearSuite from npm and run an editable workbook with multiple Sheets in your browser."
+      content="Install SearSuite from npm and run Sheet, Workbook and Node.js Headless examples."
     />
     <meta name="robots" content="index,follow" />
     <meta name="theme-color" content="#ffffff" />
@@ -16,7 +16,7 @@
     <meta property="og:title" content="SearSuite Quickstart" />
     <meta
       property="og:description"
-      content="Install SearSuite from npm and run an editable workbook with multiple Sheets in your browser."
+      content="Install SearSuite from npm and run Sheet, Workbook and Node.js Headless examples."
     />
     <meta property="og:url" content="%SITE_URL%%CANONICAL_PATH%" />
     <meta property="og:image" content="%SITE_URL%/og-searsuite.png" />
@@ -38,10 +38,27 @@
         <h1>Get started with SearSuite</h1>
         <p>
           SearSuite provides TypeScript modules for building spreadsheet experiences that people and AI agents can edit
-          together. Install the public packages from npm and run an editable workbook with multiple Sheets in your browser.
+          together. Use the published 0.0.1 packages to run a Sheet, a multi-Sheet Workbook
+          or a Node.js Headless editor. The browser examples share one application adapter file.
         </p>
       </header>
       <div class="quickstart-content">
+        <section aria-labelledby="choose-editor">
+          <h2 id="choose-editor">Choose an editor</h2>
+          <ul>
+            <li><a href="#install">Workbook</a>: start here for multiple Sheets, formulas, toolbars and tabs.</li>
+            <li><a href="#single-sheet">Sheet</a>: use the same browser setup for one spreadsheet.</li>
+            <li><a href="#headless">Headless</a>: calculate and serialize Sheet data on Node.js, without a browser.</li>
+          </ul>
+          <p>
+            Prefer a ready-to-run project? Copy the
+            <a href="https://github.com/SearSuite/searsuite-browser/tree/main/examples/npm">standalone npm examples</a>
+            into your application directory and run <code>npm ci</code>, then <code>npm run dev</code>.
+            Open <code>/</code> or <code>/sheet.html</code> on the printed URL.
+            Run <code>npm run headless</code> for Node and <code>npm test</code> for its calculation and JSON checks.
+            The project installs registry packages and does not link source workspaces.
+          </p>
+        </section>
         <section aria-labelledby="install">
           <h2 id="install">Install from npm</h2>
           <p>
@@ -62,7 +79,8 @@ npm install \
   @searsuite/sear-render-scroll@0.0.1</code></pre>
           <p>
             For an existing application, run only the package install command in its project directory. Keep all
-            <code>@searsuite/*</code> packages on the same release version.
+            example dependencies pinned to the tested <code>0.0.1</code> release set. A newer source checkout
+            does not change packages already installed from npm.
           </p>
         </section>
         <section aria-labelledby="create-page">
@@ -71,7 +89,7 @@ npm install \
             Replace <code>index.html</code> with this page. The workbook has separate containers for the toolbar,
             formula bar, editing surface, and Sheet tabs. This example uses a fixed 1100 by 480 pixel editing surface.
           </p>
-          <pre data-language="html"><code>&lt;!doctype html&gt;
+          <pre data-language="html" data-example="index.html"><code>&lt;!doctype html&gt;
 &lt;html lang="en"&gt;
   &lt;head&gt;
     &lt;meta charset="UTF-8" /&gt;
@@ -99,8 +117,9 @@ npm install \
           <p>
             Create <code>src/browser-host.ts</code>. This application helper supplies Web rendering, scrolling,
             keyboard and pointer input, clipboard, and toolbar adapters to each mounted Sheet editor.
+            The helper is defined in your application; it is not an export of an npm package.
           </p>
-          <pre data-language="typescript"><code>import type { SheetEditorAdapters } from '@searsuite/sear-assembly-setup';
+          <pre data-language="typescript" data-example="src/browser-host.ts"><code>import type { SheetEditorAdapters } from '@searsuite/sear-assembly-setup';
 import {
   BrowserPlatform,
   WebCanvasRenderContext,
@@ -119,6 +138,7 @@ import {
 } from '@searsuite/sear-plugin-web-toolbar';
 import { Scroller } from '@searsuite/sear-render-scroll';
 
+// This helper belongs to the application. All imported APIs exist in npm 0.0.1.
 export function createBrowserAdapters(canvas: HTMLCanvasElement): SheetEditorAdapters {
   return {
     ...WebSheetAdapterDefaults,
@@ -142,8 +162,8 @@ export function createBrowserAdapters(canvas: HTMLCanvasElement): SheetEditorAda
     formulaBar: WebFormulaBar,
     registerEnvironment(container) {
       container.registerInstance(Scroller.ContainerSymbol, canvas);
-      container.registerInstance(WebKeyboardRouter.eventTargetSymbol, document);
-      container.registerInstance(WebPointerCapture.eventTargetSymbol, document);
+      container.registerInstance(WebKeyboardRouter.eventTargetSymbol, canvas.ownerDocument);
+      container.registerInstance(WebPointerCapture.eventTargetSymbol, canvas.ownerDocument);
     },
   };
 }</code></pre>
@@ -153,6 +173,12 @@ export function createBrowserAdapters(canvas: HTMLCanvasElement): SheetEditorAda
             Registering <code>WebSocketTransport</code> does not open a collaboration connection; this example
             runs locally without a collaboration server.
           </p>
+          <p>
+            The <code>canvas</code> parameter is supplied by each entry below:
+            <code>document.querySelector&lt;HTMLCanvasElement&gt;('#canvas')</code> selects the Canvas created by
+            its HTML page, and <code>createBrowserAdapters(canvas)</code> passes that element to the helper.
+            Customize this one file when replacing browser adapters or registering additional host services.
+          </p>
         </section>
         <section aria-labelledby="connect-editor">
           <h2 id="connect-editor">Create the workbook</h2>
@@ -160,7 +186,7 @@ export function createBrowserAdapters(canvas: HTMLCanvasElement): SheetEditorAda
             Create <code>src/workbook.ts</code>. It creates two Sheets, enables cross-Sheet formulas, and mounts
             the toolbar, formula bar, and bottom Sheet tabs.
           </p>
-          <pre data-language="typescript"><code>import {
+          <pre data-language="typescript" data-example="src/workbook.ts"><code>import {
   createEmptySheetDocumentState,
   createSheetEditor,
   SheetRuntimeCapability,
@@ -264,11 +290,143 @@ if (import.meta.hot) {
             to undo and redo a cell edit.
           </p>
           <p>
-            For one Sheet, use <code>createSheetEditor()</code> directly with the same browser adapters,
-            <code>sheetState</code>, viewport, and embedded editor, then mount its toolbar and formula bar.
+            Continue below for complete single-Sheet and Headless entries.
             See the <a href="/docs/guide/#host">host application guide</a>,
             <a href="/docs/ref/#sear-assembly-workbook">Workbook API reference</a>, and
             <a href="/docs/ref/#sear-assembly-setup">Sheet API reference</a> for further integration.
+          </p>
+        </section>
+        <section aria-labelledby="single-sheet">
+          <h2 id="single-sheet">Run one Sheet</h2>
+          <p>
+            Reuse the browser installation and <code>src/browser-host.ts</code> above. Add
+            <code>sheet.html</code> and <code>src/sheet.ts</code>, then open <code>/sheet.html</code> on the
+            Vite URL. A2 contains 21 and A3 calculates <code>=A2*2</code> to 42. Change A2 to check recalculation,
+            then use the toolbar to undo and redo. A single Sheet does not need Workbook assembly or Sheet tabs.
+          </p>
+          <pre data-language="html" data-example="sheet.html"><code>&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+    &lt;title&gt;SearSuite Sheet&lt;/title&gt;
+    &lt;style&gt;
+      body { margin: 0; }
+      #sheet { width: 1100px; }
+      #canvas { display: block; width: 1100px; height: 480px; }
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="sheet"&gt;
+      &lt;div id="toolbar"&gt;&lt;/div&gt;
+      &lt;div id="formula-bar"&gt;&lt;/div&gt;
+      &lt;canvas id="canvas"&gt;&lt;/canvas&gt;
+    &lt;/div&gt;
+    &lt;script type="module" src="/src/sheet.ts"&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+          <pre data-language="typescript" data-example="src/sheet.ts"><code>import {
+  createEmptySheetDocumentState,
+  createSheetEditor,
+  SheetRuntimeCapability,
+} from '@searsuite/sear-assembly-setup';
+import { createSheetEmbeddedSearCoreEditor } from '@searsuite/sear-plugin-sheet-doc-adapter';
+import { createBrowserAdapters } from './browser-host';
+
+const canvas = document.querySelector&lt;HTMLCanvasElement&gt;('#canvas')!;
+const sheetState = createEmptySheetDocumentState(1000, 26);
+sheetState.sheetData.addItem(0, 0, { type: 'string', value: 'Hello SearSuite' });
+sheetState.sheetData.addItem(1, 0, { type: 'number', value: 21 });
+sheetState.sheetData.addItem(2, 0, { type: 'formula', formula: '=A2*2' });
+
+const editor = createSheetEditor({
+  sheetState,
+  viewport: { width: canvas.clientWidth, height: canvas.clientHeight },
+  adapters: createBrowserAdapters(canvas),
+  embeddedEditor: createSheetEmbeddedSearCoreEditor(),
+});
+
+editor.services.require(SheetRuntimeCapability.Toolbar).mount(document.querySelector('#toolbar'));
+editor.services.require(SheetRuntimeCapability.FormulaBar).mount(document.querySelector('#formula-bar'));
+
+function destroy() {
+  editor.destroy();
+}
+
+if (import.meta.hot) {
+  import.meta.hot.dispose(destroy);
+}</code></pre>
+          <p>
+            <code>createSheetEditor()</code> installs the default Sheet feature bundle.
+            <code>createSheetEmbeddedSearCoreEditor()</code> adds rich-text cell editing explicitly.
+            After editor creation, send changes through typed commands rather than mutating the initial state.
+          </p>
+        </section>
+        <section aria-labelledby="headless">
+          <h2 id="headless">Run on Node.js</h2>
+          <p>
+            Headless can run independently of the browser application. In a new directory, install only these
+            three packages. Use Node.js 22.12 or later; no Canvas, browser adapter, Vite or DOM is required.
+          </p>
+          <pre data-language="bash"><code>mkdir searsuite-headless
+cd searsuite-headless
+npm init -y
+npm install @searsuite/sear-assembly-headless@0.0.1 @searsuite/sear-assembly-setup@0.0.1 @searsuite/sear-plugin-formula@0.0.1</code></pre>
+          <p>Create <code>headless.mjs</code>, then run <code>node headless.mjs</code>:</p>
+          <pre data-language="javascript" data-example="headless.mjs"><code>import { createHeadlessEditor } from '@searsuite/sear-assembly-headless';
+import {
+  createEmptySheetDocumentState,
+  ExportSheetStateCommand,
+  serializeSheetDocumentState,
+} from '@searsuite/sear-assembly-setup';
+import { GetFormulaCellStatusCommand, waitForFormulaIdle } from '@searsuite/sear-plugin-formula';
+
+const sheetState = createEmptySheetDocumentState(10, 10);
+sheetState.sheetData.addItem(0, 0, { type: 'number', value: 21 });
+sheetState.sheetData.addItem(1, 0, { type: 'formula', formula: '=A1*2' });
+
+const editor = createHeadlessEditor({ sheetState });
+try {
+  await waitForFormulaIdle(editor.commands);
+  const { status } = editor.commands.run(GetFormulaCellStatusCommand, { row: 1, col: 0 });
+  console.log('A2 =', status.result); // 42
+
+  const snapshot = editor.commands.run(ExportSheetStateCommand, undefined).sheetState;
+  const json = JSON.stringify(serializeSheetDocumentState(snapshot));
+  console.log('Document JSON:', json);
+  // Store json in your file/database. Restore with deserializeSheetDocumentState(JSON.parse(json)).
+} finally {
+  editor.destroy();
+}</code></pre>
+          <p>
+            The script waits for formula work to finish, prints <code>A2 = 42</code>, produces a durable JSON
+            payload and releases the editor in <code>finally</code>. For a multi-Sheet Node runtime,
+            <code>createHeadlessWorkbookEditor()</code> accepts Workbook state and
+            <code>plugins: [WorkbookFormulaPlugin]</code> in the same way as the browser Workbook.
+          </p>
+        </section>
+        <section aria-labelledby="integration-notes">
+          <h2 id="integration-notes">Lifecycle, persistence and release notes</h2>
+          <p>
+            The browser entries define <code>destroy()</code> and register it with Vite hot updates. In React,
+            Vue or another host, call that cleanup when its editor view unmounts. A Workbook owns its mounted
+            Sheet editors; destroy its host subscriptions and bottom bar before destroying the Workbook.
+          </p>
+          <p>
+            Browser edits remain in memory and a page reload restores the seed data.
+            <code>ExportSheetStateCommand</code> and
+            <code>ExportWorkbookStateCommand</code> return runtime snapshots, not a durable file format.
+            Use <code>serializeSheetDocumentState()</code> or <code>serializeWorkbookDocumentState()</code>
+            before JSON encoding, then the matching <code>deserialize*DocumentState()</code> before creating
+            a new editor. Your application owns storage. Additional state-owning plugins must supply their
+            document codecs; CSV/XLSX import, server persistence and collaboration are not configured here.
+          </p>
+          <p>
+            The published <code>0.0.1</code> default assembly can emit duplicate plugin-depth and startup
+            command-boundary warnings. The examples retain those diagnostics. They do not require adding a
+            second history plugin or suppressing warnings. See the
+            <a href="https://github.com/SearSuite/searsuite-browser/tree/main/examples/npm#plugins-and-lifecycle">example README</a>
+            for default plugins, cleanup and the scope of the npm checks.
           </p>
         </section>
       </div>
