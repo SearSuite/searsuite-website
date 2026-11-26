@@ -1259,7 +1259,7 @@ const topicSections = {
       'Scene graph',
       /^(?:SceneGraph|Node|RenderNode|Container|Tree|NodeProperties|RenderNodeKey|LayoutNode|BlockManager|DirtyTree|GenerationalDirtyTracker)$/,
     ],
-    ['Shape nodes', /BoxNode|TextNode|DashedLine|Affix|ViewportOverlay|ClipRegion|StickyNode|createDragGuideNode/],
+    ['Shape nodes', /BoxNode|TextNode|DashedLine|Affix|ViewportOverlay|ClipRegion|StickyNode|SheetCorner|createDragGuideNode/],
     ['Cell visuals', /CellVisual/],
     ['Rich text rendering', /RichText/],
     ['Hit testing and spatial indexes', /HitColor|BVH|RTree|KDTree|Octree|QuadTree|SpatialHash|EventListener/],

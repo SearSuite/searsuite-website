@@ -6,7 +6,7 @@
     <title>SearSuite Quickstart — Install and use the npm packages</title>
     <meta
       name="description"
-      content="Install SearSuite from npm and run an editable spreadsheet in your browser."
+      content="Install SearSuite from npm and run an editable workbook with multiple Sheets in your browser."
     />
     <meta name="robots" content="index,follow" />
     <meta name="theme-color" content="#ffffff" />
@@ -16,7 +16,7 @@
     <meta property="og:title" content="SearSuite Quickstart" />
     <meta
       property="og:description"
-      content="Install SearSuite from npm and run an editable spreadsheet in your browser."
+      content="Install SearSuite from npm and run an editable workbook with multiple Sheets in your browser."
     />
     <meta property="og:url" content="%SITE_URL%%CANONICAL_PATH%" />
     <meta property="og:image" content="%SITE_URL%/og-searsuite.png" />
@@ -38,7 +38,7 @@
         <h1>Get started with SearSuite</h1>
         <p>
           SearSuite provides TypeScript modules for building spreadsheet experiences that people and AI agents can edit
-          together. Install the public packages from npm and run an editable spreadsheet in your browser.
+          together. Install the public packages from npm and run an editable workbook with multiple Sheets in your browser.
         </p>
       </header>
       <div class="quickstart-content">
@@ -46,57 +46,61 @@
           <h2 id="install">Install from npm</h2>
           <p>
             Use Node.js 22.12 or later. Create a Vite application with the vanilla TypeScript template, then install
-            the Sheet editor and browser packages. No repository checkout is required.
+            the Workbook, Sheet, and browser packages. No repository checkout is required.
           </p>
           <pre data-language="bash"><code>npm create vite@6 my-searsuite-app -- --template vanilla-ts
 cd my-searsuite-app
 npm install
 npm install \
   @searsuite/sear-assembly-setup@0.0.1 \
+  @searsuite/sear-assembly-workbook@0.0.1 \
+  @searsuite/sear-domain-workbook@0.0.1 \
   @searsuite/sear-browser-adapters@0.0.1 \
   @searsuite/sear-plugin-web-toolbar@0.0.1 \
+  @searsuite/sear-plugin-web-sheet-tabbar@0.0.1 \
   @searsuite/sear-plugin-sheet-doc-adapter@0.0.1 \
   @searsuite/sear-render-scroll@0.0.1</code></pre>
           <p>
-            For an existing application, run only the install command in its project directory. When adding other
-            <code>@searsuite/*</code> packages, use the same release version.
+            For an existing application, run only the package install command in its project directory. Keep all
+            <code>@searsuite/*</code> packages on the same release version.
           </p>
         </section>
         <section aria-labelledby="create-page">
           <h2 id="create-page">Create the page</h2>
           <p>
-            Replace <code>index.html</code> with the following page. The toolbar has its own container, and the
-            Canvas provides an 800 by 480 pixel editing surface.
+            Replace <code>index.html</code> with this page. The workbook has separate containers for the toolbar,
+            formula bar, editing surface, and Sheet tabs. This example uses a fixed 1100 by 480 pixel editing surface.
           </p>
           <pre data-language="html"><code>&lt;!doctype html&gt;
 &lt;html lang="en"&gt;
   &lt;head&gt;
     &lt;meta charset="UTF-8" /&gt;
     &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
-    &lt;title&gt;SearSuite&lt;/title&gt;
+    &lt;title&gt;SearSuite Workbook&lt;/title&gt;
     &lt;style&gt;
       body { margin: 0; }
-      #canvas { display: block; width: 800px; height: 480px; }
+      #workbook { width: 1100px; }
+      #canvas { display: block; width: 1100px; height: 480px; }
     &lt;/style&gt;
   &lt;/head&gt;
   &lt;body&gt;
-    &lt;div id="toolbar"&gt;&lt;/div&gt;
-    &lt;canvas id="canvas"&gt;&lt;/canvas&gt;
-    &lt;script type="module" src="/src/main.ts"&gt;&lt;/script&gt;
+    &lt;div id="workbook"&gt;
+      &lt;div id="toolbar"&gt;&lt;/div&gt;
+      &lt;div id="formula-bar"&gt;&lt;/div&gt;
+      &lt;canvas id="canvas"&gt;&lt;/canvas&gt;
+      &lt;div id="bottom-bar"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;script type="module" src="/src/workbook.ts"&gt;&lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;</code></pre>
         </section>
-        <section aria-labelledby="connect-editor">
-          <h2 id="connect-editor">Create the editor</h2>
+        <section aria-labelledby="browser-adapters">
+          <h2 id="browser-adapters">Configure browser adapters</h2>
           <p>
-            Replace <code>src/main.ts</code> with this code. It supplies the browser adapters, creates the Sheet
-            editor, and mounts its toolbar.
+            Create <code>src/browser-host.ts</code>. This application helper supplies Web rendering, scrolling,
+            keyboard and pointer input, clipboard, and toolbar adapters to each mounted Sheet editor.
           </p>
-          <pre data-language="typescript"><code>import {
-  createEmptySheetDocumentState,
-  createSheetEditor,
-  SheetRuntimeCapability,
-} from '@searsuite/sear-assembly-setup';
+          <pre data-language="typescript"><code>import type { SheetEditorAdapters } from '@searsuite/sear-assembly-setup';
 import {
   BrowserPlatform,
   WebCanvasRenderContext,
@@ -108,16 +112,15 @@ import {
   WebSocketTransport,
   WebTextInput,
 } from '@searsuite/sear-browser-adapters';
-import { SearWebToolbar, WebSheetAdapterDefaults } from '@searsuite/sear-plugin-web-toolbar';
-import { createSheetEmbeddedSearCoreEditor } from '@searsuite/sear-plugin-sheet-doc-adapter';
+import {
+  SearWebToolbar,
+  WebFormulaBar,
+  WebSheetAdapterDefaults,
+} from '@searsuite/sear-plugin-web-toolbar';
 import { Scroller } from '@searsuite/sear-render-scroll';
 
-const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-const editor = createSheetEditor({
-  viewport: { width: canvas.clientWidth, height: canvas.clientHeight },
-  sheetState: createEmptySheetDocumentState(100, 26),
-  embeddedEditor: createSheetEmbeddedSearCoreEditor(),
-  adapters: {
+export function createBrowserAdapters(canvas: HTMLCanvasElement): SheetEditorAdapters {
+  return {
     ...WebSheetAdapterDefaults,
     platform: BrowserPlatform,
     createRenderContexts() {
@@ -136,32 +139,136 @@ const editor = createSheetEditor({
     cursorEngine: WebCursorEngine,
     collabTransport: WebSocketTransport,
     toolbar: SearWebToolbar,
+    formulaBar: WebFormulaBar,
     registerEnvironment(container) {
       container.registerInstance(Scroller.ContainerSymbol, canvas);
       container.registerInstance(WebKeyboardRouter.eventTargetSymbol, document);
       container.registerInstance(WebPointerCapture.eventTargetSymbol, document);
     },
+  };
+}</code></pre>
+          <p>
+            <code>WebSheetAdapterDefaults</code> supplies text shaping, clipboard, file download, user interaction,
+            XML/XPath, and HTTP adapters. The remaining options bind the Canvas and browser event sources.
+            Registering <code>WebSocketTransport</code> does not open a collaboration connection; this example
+            runs locally without a collaboration server.
+          </p>
+        </section>
+        <section aria-labelledby="connect-editor">
+          <h2 id="connect-editor">Create the workbook</h2>
+          <p>
+            Create <code>src/workbook.ts</code>. It creates two Sheets, enables cross-Sheet formulas, and mounts
+            the toolbar, formula bar, and bottom Sheet tabs.
+          </p>
+          <pre data-language="typescript"><code>import {
+  createEmptySheetDocumentState,
+  createSheetEditor,
+  SheetRuntimeCapability,
+} from '@searsuite/sear-assembly-setup';
+import {
+  createWorkbookEditor,
+  WorkbookActiveSheetEditorObservation,
+  WorkbookFormulaPlugin,
+} from '@searsuite/sear-assembly-workbook';
+import { createWorkbookDocumentState } from '@searsuite/sear-domain-workbook';
+import { BrowserPlatform } from '@searsuite/sear-browser-adapters';
+import { createSheetEmbeddedSearCoreEditor } from '@searsuite/sear-plugin-sheet-doc-adapter';
+import { SearWebBottomBar } from '@searsuite/sear-plugin-web-sheet-tabbar';
+import { createBrowserAdapters } from './browser-host';
+
+const canvas = document.querySelector&lt;HTMLCanvasElement&gt;('#canvas')!;
+const toolbarElement = document.querySelector&lt;HTMLElement&gt;('#toolbar')!;
+const formulaBarElement = document.querySelector&lt;HTMLElement&gt;('#formula-bar')!;
+const bottomBarElement = document.querySelector&lt;HTMLElement&gt;('#bottom-bar')!;
+
+const first = createEmptySheetDocumentState(1000, 26);
+first.sheetData.addItem(0, 0, { type: 'string', value: 'Hello SearSuite' });
+first.sheetData.addItem(1, 0, { type: 'number', value: 21 });
+first.sheetData.addItem(2, 0, { type: 'formula', formula: '=A2*2' });
+
+const second = createEmptySheetDocumentState(1000, 26);
+second.sheetData.addItem(0, 0, { type: 'string', value: 'Second Sheet' });
+second.sheetData.addItem(1, 0, { type: 'formula', formula: '=Sheet1!A2*3' });
+
+const workbook = createWorkbookEditor({
+  plugins: [WorkbookFormulaPlugin],
+  documentState: createWorkbookDocumentState({
+    id: 'my-workbook',
+    sheets: [
+      { id: 'sheet-1', name: 'Sheet1' },
+      { id: 'sheet-2', name: 'Sheet2' },
+    ],
+    sheetStates: { 'sheet-1': first, 'sheet-2': second },
+  }),
+  viewport: { width: canvas.clientWidth, height: canvas.clientHeight },
+  adapters: createBrowserAdapters(canvas),
+  sheetEditorFactory: ({ configuration }) =&gt; createSheetEditor({
+    ...configuration,
+    embeddedEditor: createSheetEmbeddedSearCoreEditor(),
+  }),
+});
+
+function mountSheetChrome() {
+  const editor = workbook.sheets.getActiveEditor();
+  editor.services.require(SheetRuntimeCapability.Toolbar).mount(toolbarElement);
+  editor.services.require(SheetRuntimeCapability.FormulaBar).mount(formulaBarElement);
+}
+
+mountSheetChrome();
+const unsubscribe = workbook.observations.subscribe(
+  WorkbookActiveSheetEditorObservation,
+  mountSheetChrome,
+);
+
+const bottomBar = new SearWebBottomBar(new BrowserPlatform());
+bottomBar.mount(bottomBarElement, {
+  workbook: {
+    editor: workbook,
+    createSheetState: () =&gt; createEmptySheetDocumentState(1000, 26),
   },
 });
 
-editor.services.require(SheetRuntimeCapability.Toolbar).mount(document.getElementById('toolbar'));
+function destroy() {
+  unsubscribe();
+  bottomBar.destroy();
+  workbook.destroy();
+}
 
 if (import.meta.hot) {
-  import.meta.hot.dispose(() => editor.destroy());
+  import.meta.hot.dispose(destroy);
 }</code></pre>
           <p>
-            The editor runs locally. Providing <code>WebSocketTransport</code> does not open a collaboration
-            connection; this setup does not require a collaboration server. In an application, call
-            <code>editor.destroy()</code> when the editor view unmounts.
+            <code>WorkbookFormulaPlugin</code> enables cross-Sheet formula references. Workbook history is already
+            installed by the default assembly; do not register <code>WorkbookHistoryPlugin</code> again.
+            Use <code>plugins</code> for Workbook plugins and <code>sheetPlugins</code> for additional Sheet plugins.
+          </p>
+          <p>
+            Each Sheet has a stable id and its own document state. The <code>sheetEditorFactory</code> adds the
+            embedded rich-text editor whenever the Workbook mounts a Sheet. Switching Sheets replaces the active
+            Sheet editor, so <code>WorkbookActiveSheetEditorObservation</code> remounts its toolbar and formula bar.
+            The bottom bar stays bound to the Workbook and creates an empty Sheet when its add button is clicked.
+          </p>
+          <p>
+            Call <code>destroy()</code> when the application view unmounts. It releases the host subscription,
+            bottom bar, and Workbook-owned editors. The final block handles Vite hot updates. The document state
+            lives in memory; reloading the page restores the initial example data.
           </p>
         </section>
         <section aria-labelledby="start">
-          <h2 id="start">Start the application</h2>
+          <h2 id="start">Start and try the workbook</h2>
           <pre data-language="bash"><code>npm run dev</code></pre>
           <p>
-            Open the URL printed by Vite. Select a cell and type to edit it, or double-click a cell to open its
-            editor. See the <a href="/docs/guide/#host">host application guide</a> and
-            <a href="/docs/ref/#sear-assembly-setup">API reference</a> for further integration.
+            Open the URL printed by Vite. On Sheet1, A2 contains 21 and A3 evaluates <code>=A2*2</code> to 42.
+            Switch to Sheet2: A2 evaluates <code>=Sheet1!A2*3</code> to 63. Change Sheet1 A2 to 42, then verify
+            that Sheet1 A3 becomes 84 and Sheet2 A2 becomes 126. Use the bottom bar to add a Sheet, or the toolbar
+            to undo and redo a cell edit.
+          </p>
+          <p>
+            For one Sheet, use <code>createSheetEditor()</code> directly with the same browser adapters,
+            <code>sheetState</code>, viewport, and embedded editor, then mount its toolbar and formula bar.
+            See the <a href="/docs/guide/#host">host application guide</a>,
+            <a href="/docs/ref/#sear-assembly-workbook">Workbook API reference</a>, and
+            <a href="/docs/ref/#sear-assembly-setup">Sheet API reference</a> for further integration.
           </p>
         </section>
       </div>
