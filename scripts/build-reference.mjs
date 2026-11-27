@@ -9,7 +9,7 @@ const coreRoot = resolve(root, '../searsuite');
 const packageRoots = [coreRoot, resolve(root, '../searsuite-browser')];
 const sourceRoot = resolve(root, 'source');
 const reflection = JSON.parse(readFileSync(resolve(root, '.generated/typedoc.json'), 'utf8'));
-const sourcePath = (fileName) => fileName.replace(/^searsuite(?:-browser|-pro)?\//, '');
+const sourcePath = (fileName) => fileName.replace(/^searsuite(?:-browser)?\//, '');
 const resolveSourceFile = (fileName) => packageRoots.map((packageRoot) => resolve(packageRoot, sourcePath(fileName))).find(existsSync);
 const resolvePackageFile = (directory, fileName) => packageRoots
   .map((packageRoot) => resolve(packageRoot, 'packages', directory, fileName))
@@ -128,12 +128,17 @@ function sourceDocumentationOf(reflectionItem) {
 }
 
 function documentationFor(reflectionItem, ...related) {
-  const documentation = documentationOf(reflectionItem, ...related);
+  const documentation = documentationOf(
+    reflectionItem,
+    reflectionItem?.getSignature,
+    reflectionItem?.setSignature,
+    ...related,
+  );
   if (documentation.summary) return documentation;
   const inheritedTarget = reflectionItem?.inheritedFrom?.target;
   if (typeof inheritedTarget === 'number') {
     const inheritedReflection = reflectionsById.get(inheritedTarget);
-    const inheritedDocumentation = inheritedReflection ? documentationOf(inheritedReflection) : null;
+    const inheritedDocumentation = inheritedReflection ? documentationOf(inheritedReflection, inheritedReflection.getSignature, inheritedReflection.setSignature) : null;
     if (inheritedDocumentation?.summary) return inheritedDocumentation;
   }
   return sourceDocumentationOf(reflectionItem) ?? documentation;
@@ -785,10 +790,10 @@ const navigationGroups = [
 ];
 
 const entryPoints = {
-  'sear-assembly-setup': ['createSheetEditor', 'SheetEditor', 'createDocEditor', 'DocEditor'],
+  'sear-assembly-setup': ['createSheetEditor', 'SheetEditorConfiguration', 'createDocEditor', 'DocEditor'],
   'sear-assembly-core': ['SearCoreSheet', 'SearCoreDoc', 'Pipeline'],
   'sear-assembly-doc': ['ParagraphPlugin', 'TablePlugin', 'BoldTextStylePlugin'],
-  'sear-assembly-workbook': ['createWorkbookEditor', 'WorkbookEditor'],
+  'sear-assembly-workbook': ['createWorkbookEditor', 'WorkbookEditorConfiguration'],
   'sear-domain-doc': ['RichDocNode', 'DocNodeRegistry', 'DocSelection', 'DocCursorPos'],
   'sear-domain-formula-engine': ['IFormulaParser', 'IFormulaEvaluator', 'IFunctionRegistry', 'FormulaFunction'],
   'sear-domain-formula-engine-ts': ['FormulaParser', 'FormulaEvaluator', 'DependencyGraph', 'FunctionRegistry'],
@@ -802,10 +807,10 @@ const entryPoints = {
 
 const referenceExamples = {
   'sear-assembly-setup:createSheetEditor': `import {
-  createEmptySheetDocumentState,
   createSheetEditor,
   type SheetEditorAdapters,
 } from '@searsuite/sear-assembly-setup';
+import { createEmptySheetDocumentState } from '@searsuite/sear-assembly-sheet-state';
 import { SelectRangeCommand } from '@searsuite/sear-plugin-selection';
 
 async function openSheet(adapters: SheetEditorAdapters) {
@@ -902,6 +907,9 @@ const topicSections = {
     ['Sheet interaction', /Sheet|Selection|CellMatrix/],
   ],
   'sear-assembly-commands': [
+    ['Editor client', /^SheetEditor$/],
+    ['Plugin contracts and capabilities', /Plugin|Runtime|Capability|FormulaProviderRegistry|SheetCellStyle/],
+    ['Displayed value publication', /DisplayedValue/],
     ['Command dispatch', /^(?:Doc|Sheet)Command|^DocEditorCommand|^define(?:Doc|Sheet)Command|^CommandExecutionPhase/],
     ['Transactions', /Transaction|Pipeline|EffectCommand|LocalActionCommand|createSheetTransaction/],
     ['Selection', /Selection|SelectRange|selectRange|moveSelection|extendSelection/],
@@ -910,6 +918,8 @@ const topicSections = {
     ['Queries', /Query/],
   ],
   'sear-assembly-doc': [
+    ['Document state and editing model', /DocEdit|DocHistory|DocSelection|DocNavigation|HistoryPlugin|SelectionPlugin|TextInputPlugin|createDocDocumentFormatting/],
+    ['Embedded editing policies', /^Sheet(?:Clipboard|Embedded|FormulaReference|Shortcut|Composition|Delete|InlineStyle|Input|Key|Text|Edit)/],
     [
       'Document plugin contracts',
       /^(?:DocPlugin|DocRuntime|DocCaretPluginKey|DocCompositionPluginKey|DocContentRenderPluginKey|DocSelectionPluginKey)/,
@@ -927,6 +937,8 @@ const topicSections = {
     ],
   ],
   'sear-assembly-plugin': [
+    ['Transaction pipeline and command scope', /Pipeline|Command|Sear.*Error/],
+    ['Interaction state', /SheetInteraction|SheetEditSession/],
     [
       'Plugin lifecycle',
       /^(?:Plugin|PluginKey|PluginManager|PluginSpec|PluginExtension|EditorLifecycleError|EditorLifecycleErrorCode|EditorLifecycleStack)$/,
@@ -949,6 +961,7 @@ const topicSections = {
     ['Transfer clipboard metadata', /^(?:SheetClipboard|SheetPortableClipboard)/],
   ],
   'sear-assembly-setup': [
+    ['View extension composition', /DefaultDocViews|View/],
     [
       'Create an editor',
       /^(?:createDocEditor|createSheetEditor|DocEditor|SheetEditor|DocDocumentState|SheetDocumentState|DocEditorAdapters|SheetEditorAdapters|DocEditorConfiguration|SheetEditorConfiguration)$/,
@@ -987,14 +1000,16 @@ const topicSections = {
       /Plugin|SessionState|RuntimeCapability|^registerDefaultDependencies|^defineSessionState|^readSessionState|^ViewportOverlay/,
     ],
   ],
-  'sear-assembly-workbook': [
+  'sear-assembly-workbook': [['Create a visual workbook', /WorkbookEditor|WorkbookSheetEditorFactory|createWorkbookEditor/]],
+  'sear-assembly-workbook-kernel': [
+    ['Business runtime assembly', /createWorkbookRuntime|WorkbookRuntimeConfiguration|WorkbookSheetClientFactory/],
     [
       'Create a workbook editor',
       /WorkbookEditor|^createWorkbookEditor|WorkbookPlugin|WorkbookRuntimeCapability|^resolveWorkbookPlugins|^registerWorkbookPlugin|^defineWorkbookRuntimeCapability/,
     ],
     [
       'Add and switch sheets',
-      /^(?:Activate|Add|Remove|Move|Rename|Hide|Unhide)WorkbookSheet|WorkbookSheetsApi|WorkbookSheetEditorFactory/,
+      /^(?:Activate|Add|Remove|Move|Rename|Hide|Unhide)WorkbookSheet|WorkbookSheetsApi|WorkbookSheetClientsApi|WorkbookSheetEditorFactory|firstVisibleSheetId/,
     ],
     ['Workbook document state', /WorkbookDocument|WorkbookSheetStateCapture|^serializeWorkbook|^deserializeWorkbook/],
     [
@@ -1006,7 +1021,7 @@ const topicSections = {
       'Formula references',
       /FormulaReference|FormulaBrokenReference|FormulaGraphReference|FormulaDraft|FormulaCompiledReferenceShift|^PickWorkbookFormula|^CancelWorkbookFormula|^RestoreWorkbookFormula|^CaptureWorkbookFormula/,
     ],
-    ['Recalculate formulas', /Formula|^RecalculateWorkbook/],
+    ['Recalculate formulas', /Formula|^RecalculateWorkbook|readWorkbookUpdatedCells/],
     [
       'History and collaboration',
       /History|Collaboration|^UndoWorkbook|^RedoWorkbook|^ConnectWorkbook|^DisconnectWorkbook/,
@@ -1029,6 +1044,7 @@ const topicSections = {
     ['Text layout', /Layout|Line|Spacing|Baseline|BlockFlow/],
   ],
   'sear-domain-cell-types': [
+    ['Semantic cell styles and display values', /Style|RulePriority|IconShape|extractRichText|formatFormulaValue/],
     ['Cell values', /CellType|CellMatrixElement/],
     [
       'Formatting and displayed values',
@@ -1133,6 +1149,7 @@ const topicSections = {
     ['Edit checkboxes', /Checkbox|^normalizeCheckboxRange/],
   ],
   'sear-plugin-formula': [
+    ['Value publication and links', /FormulaValuePublisher|FormulaHyperlink/],
     [
       'Run evaluation',
       /SheetFormulaPlugin|sheetFormulaPluginKey|RecalcScheduler|FormulaPluginState|FormulaRegistryOwnership|FormulaSchedulerDataSource|FormulaResultStore/,
@@ -1152,6 +1169,7 @@ const topicSections = {
     ['Formula references', /Reference|FormulaRef|CrossSheet|Highlight|ColorPalette|^getFormulaReferenceColor/],
   ],
   'sear-plugin-cell-editor': [
+    ['Editing state and options', /CellDocumentFormatting|SheetCellEditorOptions|EditorState|PickedReferenceKind|CellEditDraft|CellEditModel/],
     [
       'Open and commit an edit',
       /^(?:SheetCellEditor(?:ExitReason|Kind|Plugin)|SheetBeginCellEditInput|SheetCancelCellEditInput|SheetCommitCellEditInput|SheetOpenCellEditorInput|BeginCellEditCommand|CancelCellEditCommand|CommitCellEditCommand|InsertCurrentDateTimeCommand|OpenCellEditorCommand|IsCellEditingQuery|getCellEditableValue)$/,
@@ -1191,6 +1209,7 @@ const topicSections = {
     ['Evaluate input', /Validation|Evaluator|DropdownMode|InputPolicy|^hasIntegerSolution$/],
   ],
   'sear-plugin-dropdown': [
+    ['Dropdown indicators', /DropdownIndicator/],
     [
       'Read and change a cell',
       /DropdownCell|DropdownValue|^ClearDropdown|^ReadDropdown|^assertDropdown|^readDropdownCell|^formatDropdown|^parseDropdown/,
@@ -1255,9 +1274,10 @@ const topicSections = {
     ['Row and column sizes', /Row|Column|Visibility|Size|Dimension/],
   ],
   'sear-render-node': [
+    ['Text style paint contributions', /RenderContribution/],
     [
       'Scene graph',
-      /^(?:SceneGraph|Node|RenderNode|Container|Tree|NodeProperties|RenderNodeKey|LayoutNode|BlockManager|DirtyTree|GenerationalDirtyTracker)$/,
+      /^(?:SceneGraph|Node|RenderNode|Container|Tree|NodeProperties|RenderNodeKey|LayoutNode|BlockManager|DirtyTree|FrameDirtyTracker)$/,
     ],
     ['Shape nodes', /BoxNode|TextNode|DashedLine|Affix|ViewportOverlay|ClipRegion|StickyNode|SheetCorner|createDragGuideNode/],
     ['Cell visuals', /CellVisual/],
@@ -1265,6 +1285,7 @@ const topicSections = {
     ['Hit testing and spatial indexes', /HitColor|BVH|RTree|KDTree|Octree|QuadTree|SpatialHash|EventListener/],
   ],
   'sear-render-registry': [
+    ['Renderer definitions', /RendererDefinition|defineCellRenderer/],
     [
       'Cell renderers',
       /Cell$|CellContext|CellProperties|CellRegion|CellRenderType|^extractRichText|^formatFormulaValue|FormulaResultProvider/,
@@ -1304,6 +1325,7 @@ const topicSections = {
     ['Protocol messages', /Message|Submission|Batch|ProtocolVersion/],
   ],
   'sear-domain-commands': [
+    ['Normalized text input', /TextInput/],
     ['Document transactions', /Transaction|DocStep|DocCommandContext|DocCommand$|DocCursorDirection/],
     ['Editing commands', /Command$/],
   ],
@@ -1379,7 +1401,8 @@ const topicSections = {
     ['Marker state', /DemoMatrix|DemoPlugin|DemoMarker$|DemoFieldKey|DemoStateToken|^assertSheetDemoMarker/],
     ['Set and read markers', /Command|Quer|Input|^readSheetDemoMarkers/],
   ],
-  'sear-plugin-sheet-doc-adapter': [
+  'sear-assembly-sheet-doc': [
+    ['Embedded editor views', /View/],
     ['Embedded document editor', /EditorAdapter|EmbeddedDoc|EmbeddedEditor|InlineStyle|^createSheetEmbedded/],
     ['Sheet integration plugins', /Plugin|SheetOverflow|SheetShortcut|SheetClipboard|SheetFormula/],
   ],
@@ -1399,6 +1422,14 @@ const topicSections = {
     ['Web controls', /Toolbar|FormulaBar|Clipboard|ConditionalRule|ICONS|CSS/],
   ],
   'sear-render': [
+    ['View extensions and options', /View|ViewKey/],
+    ['Selection and range interaction', /Selection|RangeDrag|RangeMovePreview|AxisDragHighlight|AxisInsertionBoundary/],
+    ['Cell editor presentation', /CellEditor|CellEdit/],
+    ['Resize interaction', /Resize|Border/],
+    ['Highlights and formula references', /Highlight|Reference|Highlighter/],
+    ['Checkbox glyphs', /Checkbox/],
+    ['Cursor and zoom presentation', /Cursor|Zoom|zoom/],
+    ['Semantic style and validation projection', /StyleView|FilterVisual|numericValidation/],
     [
       'Grid and labels',
       /SheetCellMergeRender|SheetColumnLabelPlugin|SheetCornerPlugin|SheetGridPlugin|SheetGridRender|SheetRowNumberPlugin/,
@@ -1416,8 +1447,9 @@ const topicSections = {
     ],
   ],
   'sear-render-event-engine': [
+    ['View extensions', /ViewExtension/],
     ['Event registration', /EventEngine|EventRegistrar/],
-    ['Event values', /EventWithOffset|normalizeEventKey|getPluginHandlerName/],
+    ['Event values', /EventWithOffset|normalizeEventKey|getViewHandlerName/],
   ],
   'sear-render-input': [
     ['Keyboard input', /KeyboardRouter|^Input$|^InputManager$/],
@@ -1444,8 +1476,8 @@ const chapterTopics = {
   'sear-assembly-plugin': { registration: 'Plugin lifecycle', lifecycle: 'Plugin lifecycle' },
   'sear-assembly-setup': { 'entry-points': 'Create an editor', 'editor-lifecycle': 'Create an editor' },
   'sear-assembly-workbook': {
-    'create-workbook': 'Create a workbook editor',
-    'switch-and-change': 'Add and switch sheets',
+    'create-workbook': 'Create a visual workbook',
+    'switch-and-change': 'Create a visual workbook',
   },
   'sear-domain-doc': { 'document-tree': 'Document nodes', selections: 'Selection and positions' },
   'sear-domain-formula-engine': {

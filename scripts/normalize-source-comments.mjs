@@ -142,7 +142,7 @@ const ownerMemberDescriptions = new Map([
   ['RichTextCellCommitStrategy.commit', 'Persists a cloned rich-document snapshot.'],
   ['TextCellCommitStrategy.commit', 'Persists input as an explicit text cell.'],
   ['Container.query', 'Returns descendants whose boundaries intersect the supplied rectangle.'],
-  ['GenerationalDirtyTracker.query', 'Returns dirty nodes for the requested render generation.'],
+  ['FrameDirtyTracker.query', 'Returns dirty nodes for the requested render generation.'],
   ['Tree.query', 'Returns indexed entries whose boundaries intersect the supplied rectangle.'],
 ]);
 

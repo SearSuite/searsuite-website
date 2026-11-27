@@ -1,11 +1,9 @@
 import 'reflect-metadata';
-import { createEmptySheetDocumentState, createSheetEditor } from '@searsuite/sear-assembly-setup';
-import {
-  WorkbookActiveSheetEditorObservation,
-  WorkbookFormulaPlugin,
-  createWorkbookEditor,
-  type WorkbookEditor,
-} from '@searsuite/sear-assembly-workbook';
+import { createSheetEditor } from '@searsuite/sear-assembly-setup';
+import { createEmptySheetDocumentState } from '@searsuite/sear-assembly-sheet-state';
+import { WorkbookActiveSheetEditorObservation, type WorkbookEditor } from '@searsuite/sear-assembly-workbook-kernel';
+import { createWorkbookEditor } from '@searsuite/sear-assembly-workbook';
+import { WorkbookFormulaPlugin } from '@searsuite/sear-assembly-workbook-kernel';
 import {
   BrowserPlatform,
   WebCanvasRenderContext,
@@ -21,7 +19,7 @@ import { Scroller } from '@searsuite/sear-render-scroll';
 import { SearWebBottomBar } from '@searsuite/sear-plugin-web-sheet-tabbar';
 import { HeadlessToolbar } from '@searsuite/sear-assembly-plugin';
 import { WebSheetAdapterDefaults } from '@searsuite/sear-plugin-web-toolbar';
-import { createSheetEmbeddedSearCoreEditor } from '@searsuite/sear-plugin-sheet-doc-adapter';
+import { createSheetEmbeddedSearCoreEditor } from '@searsuite/sear-assembly-sheet-doc';
 import { createDemoWorkbook } from './workbook';
 
 declare global {

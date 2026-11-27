@@ -1,4 +1,4 @@
-import { createEmptySheetDocumentState, type SheetDocumentState } from '@searsuite/sear-assembly-setup';
+import { createEmptySheetDocumentState, type SheetDocumentState } from '@searsuite/sear-assembly-sheet-state';
 import { createWorkbookDocumentState } from '@searsuite/sear-domain-workbook';
 
 export function createDemoWorkbook() {
