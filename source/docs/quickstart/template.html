@@ -38,7 +38,7 @@
         <h1>Get started with SearSuite</h1>
         <p>
           SearSuite provides TypeScript modules for building spreadsheet experiences that people and AI agents can edit
-          together. Use the published 0.0.2 packages to run a Sheet, a multi-Sheet Workbook
+          together. Use the published 0.0.3 packages to run a Sheet, a multi-Sheet Workbook
           or a Node.js Headless editor. The browser examples share one application adapter file.
         </p>
       </header>
@@ -69,20 +69,20 @@
 cd my-searsuite-app
 npm install
 npm install \
-  @searsuite/sear-assembly-setup@0.0.2 \
-  @searsuite/sear-assembly-workbook@0.0.2 \
-  @searsuite/sear-assembly-workbook-kernel@0.0.2 \
-  @searsuite/sear-assembly-sheet-state@0.0.2 \
-  @searsuite/sear-assembly-sheet-kernel@0.0.2 \
+  @searsuite/sear-assembly-setup@0.0.3 \
+  @searsuite/sear-assembly-workbook@0.0.3 \
+  @searsuite/sear-assembly-workbook-kernel@0.0.3 \
+  @searsuite/sear-assembly-sheet-state@0.0.3 \
+  @searsuite/sear-assembly-sheet-kernel@0.0.3 \
   @searsuite/sear-domain-workbook@0.0.2 \
-  @searsuite/sear-browser-adapters@0.0.2 \
-  @searsuite/sear-plugin-web-toolbar@0.0.2 \
-  @searsuite/sear-plugin-web-sheet-tabbar@0.0.2 \
-  @searsuite/sear-assembly-sheet-doc@0.0.2 \
-  @searsuite/sear-render-scroll@0.0.2</code></pre>
+  @searsuite/sear-browser-adapters@0.0.3 \
+  @searsuite/sear-plugin-web-toolbar@0.0.3 \
+  @searsuite/sear-plugin-web-sheet-tabbar@0.0.3 \
+  @searsuite/sear-assembly-sheet-doc@0.0.3 \
+  @searsuite/sear-render-scroll@0.0.3</code></pre>
           <p>
             For an existing application, run only the package install command in its project directory. Keep all
-            example dependencies pinned to the tested <code>0.0.2</code> release set. A newer source checkout
+            example dependencies pinned to the tested <code>0.0.3</code> release set. A newer source checkout
             does not change packages already installed from npm.
           </p>
         </section>
@@ -392,7 +392,7 @@ if (import.meta.hot) {
           <pre data-language="bash"><code>mkdir searsuite-headless
 cd searsuite-headless
 npm init -y
-npm install @searsuite/sear-assembly-headless@0.0.2 @searsuite/sear-assembly-sheet-state@0.0.2 @searsuite/sear-assembly-sheet-kernel@0.0.2 @searsuite/sear-plugin-formula@0.0.2</code></pre>
+npm install @searsuite/sear-assembly-headless@0.0.3 @searsuite/sear-assembly-sheet-state@0.0.3 @searsuite/sear-assembly-sheet-kernel@0.0.3 @searsuite/sear-plugin-formula@0.0.3</code></pre>
           <p>Create <code>headless.mjs</code>, then run <code>node headless.mjs</code>:</p>
           <pre data-language="javascript" data-example="headless.mjs"><code>import { createEmptySheetDocumentState, serializeSheetDocumentState } from '@searsuite/sear-assembly-sheet-state';
 import { createHeadlessEditor } from '@searsuite/sear-assembly-headless';
